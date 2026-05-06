@@ -1,6 +1,11 @@
-"""Echo — return the input string unchanged. Smoke-test op."""
+"""Echo — return the input string unchanged. Smoke-test op.
 
-from nodes.smoke import op
+Operation files use a relative import (`from .. import op`) so the same
+pattern works for any node — the `op` decorator is always pulled from the
+parent node package's REGISTRY.
+"""
+
+from .. import op
 
 
 @op(

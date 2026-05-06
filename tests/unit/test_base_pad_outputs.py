@@ -154,6 +154,17 @@ def test_unfilled_vae_raises():
         )
 
 
+def test_out_of_range_output_index_raises_value_error():
+    """Op author misconfiguration is caught with op_id context, not bare IndexError."""
+    with pytest.raises(ValueError, match=r"\[bad_op\] output_indices=\(5,\) is out of range"):
+        _pad_outputs(
+            op_result=("x",),
+            output_indices=(5,),
+            return_types=("STRING", "INT"),
+            op_id="bad_op",
+        )
+
+
 def test_returns_tuple_matching_return_types_length():
     result = _pad_outputs(
         op_result=("a", 1),

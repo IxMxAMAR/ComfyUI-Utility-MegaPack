@@ -140,6 +140,12 @@ def _pad_outputs(
     Unfilled slots get type-appropriate defaults from `_default_for_type`.
     Opaque types (MODEL/CLIP/VAE) raise OutputNotProducedError if unfilled.
     """
+    for idx in output_indices:
+        if idx >= len(return_types):
+            raise ValueError(
+                f"[{op_id}] output_indices={output_indices!r} is out of range "
+                f"for RETURN_TYPES of length {len(return_types)}"
+            )
     out = [None] * len(return_types)
     for idx, value in zip(output_indices, op_result):
         out[idx] = value
