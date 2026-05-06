@@ -10,6 +10,7 @@ from nodes.prompt import PromptNode
 from nodes.image_pro import ImageProNode
 from nodes.mask_latent import MaskLatentNode
 from nodes.io_workflow import IOWorkflowNode
+from nodes.convenience import ConvenienceNode
 
 NODE_CLASS_MAPPINGS: dict = {
     "UtilMegaPack_SmokeTest": SmokeTestNode,
@@ -18,6 +19,7 @@ NODE_CLASS_MAPPINGS: dict = {
     "UtilMegaPack_ImagePro": ImageProNode,
     "UtilMegaPack_MaskLatent": MaskLatentNode,
     "UtilMegaPack_IOWorkflow": IOWorkflowNode,
+    "UtilMegaPack_Convenience": ConvenienceNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS: dict = {
@@ -27,6 +29,7 @@ NODE_DISPLAY_NAME_MAPPINGS: dict = {
     "UtilMegaPack_ImagePro": "Image Pro",
     "UtilMegaPack_MaskLatent": "Mask & Latent",
     "UtilMegaPack_IOWorkflow": "IO & Workflow",
+    "UtilMegaPack_Convenience": "Convenience",
 }
 
 WEB_DIRECTORY = "./web"
