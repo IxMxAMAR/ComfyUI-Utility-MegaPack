@@ -88,3 +88,63 @@ class OutputNotProducedError(RuntimeError):
             f"Operation '{op_id}' does not produce a '{slot_name}' output — "
             f"disconnect that slot or pick a different mode."
         )
+
+
+def _default_for_type(type_name: str, op_id: str):
+    """Return a type-appropriate default for an unfilled output slot.
+
+    Lazy-imports torch so this module can be imported in tooling environments
+    where torch isn't installed (e.g. doc-generation pipelines).
+    """
+    if isinstance(type_name, AnyType):
+        return None
+    if type_name == "STRING":
+        return ""
+    if type_name == "INT":
+        return 0
+    if type_name == "FLOAT":
+        return 0.0
+    if type_name == "BOOLEAN":
+        return False
+    if type_name == "LIST":
+        return []
+    if type_name == "DICT":
+        return {}
+    if type_name in ("MODEL", "CLIP", "VAE"):
+        raise OutputNotProducedError(slot_name=type_name, op_id=op_id)
+    if type_name == "IMAGE":
+        import torch
+
+        return torch.zeros((1, 1, 1, 3))
+    if type_name == "MASK":
+        import torch
+
+        return torch.zeros((1, 1, 1))
+    if type_name == "LATENT":
+        import torch
+
+        return {"samples": torch.zeros((1, 4, 8, 8))}
+    return None
+
+
+def _pad_outputs(
+    *,
+    op_result: tuple,
+    output_indices: tuple,
+    return_types: tuple,
+    op_id: str,
+) -> tuple:
+    """Pad an op's result tuple to the full RETURN_TYPES width.
+
+    Filled slots come from `op_result` in the order given by `output_indices`.
+    Unfilled slots get type-appropriate defaults from `_default_for_type`.
+    Opaque types (MODEL/CLIP/VAE) raise OutputNotProducedError if unfilled.
+    """
+    out = [None] * len(return_types)
+    for idx, value in zip(output_indices, op_result):
+        out[idx] = value
+    filled = set(output_indices)
+    for i, type_name in enumerate(return_types):
+        if i not in filled:
+            out[i] = _default_for_type(type_name, op_id=op_id)
+    return tuple(out)
