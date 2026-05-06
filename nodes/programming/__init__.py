@@ -13,6 +13,7 @@ from nodes.programming.operations import (  # noqa: E402, F401
     text,
     data_struct,
     control_flow,
+    crypto,
 )
 
 
