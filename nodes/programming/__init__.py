@@ -12,6 +12,7 @@ from nodes.programming.operations import (  # noqa: E402, F401
     math_signals,
     text,
     data_struct,
+    control_flow,
 )
 
 
