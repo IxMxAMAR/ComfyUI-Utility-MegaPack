@@ -7,17 +7,20 @@ NODE_DISPLAY_NAME_MAPPINGS, and WEB_DIRECTORY.
 from nodes.smoke import SmokeTestNode
 from nodes.programming import ProgrammingNode
 from nodes.prompt import PromptNode
+from nodes.image_pro import ImageProNode
 
 NODE_CLASS_MAPPINGS: dict = {
     "UtilMegaPack_SmokeTest": SmokeTestNode,
     "UtilMegaPack_Programming": ProgrammingNode,
     "UtilMegaPack_Prompt": PromptNode,
+    "UtilMegaPack_ImagePro": ImageProNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS: dict = {
     "UtilMegaPack_SmokeTest": "Smoke Test",
     "UtilMegaPack_Programming": "Programming",
     "UtilMegaPack_Prompt": "Prompt",
+    "UtilMegaPack_ImagePro": "Image Pro",
 }
 
 WEB_DIRECTORY = "./web"
