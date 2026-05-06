@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from nodes._base import ANY, OutputNotProducedError, _pad_outputs
+from nodes._base import ANY, _pad_outputs
 
 
 def test_filled_indices_use_provided_values():
@@ -122,36 +122,20 @@ def test_unfilled_wildcard_defaults_to_none():
     assert result[0] is None
 
 
-def test_unfilled_model_raises():
-    with pytest.raises(OutputNotProducedError) as exc:
-        _pad_outputs(
+def test_unfilled_opaque_returns_none():
+    """Opaque types (MODEL/CLIP/VAE) get None at the padding layer.
+
+    ComfyUI's runtime is responsible for fail-fast when a downstream node
+    tries to use None as a model — we don't have wire-level visibility here.
+    """
+    for opaque in ("MODEL", "CLIP", "VAE"):
+        result = _pad_outputs(
             op_result=(),
             output_indices=(),
-            return_types=("MODEL",),
+            return_types=(opaque,),
             op_id="echo",
         )
-    assert exc.value.slot_name == "MODEL"
-    assert exc.value.op_id == "echo"
-
-
-def test_unfilled_clip_raises():
-    with pytest.raises(OutputNotProducedError):
-        _pad_outputs(
-            op_result=(),
-            output_indices=(),
-            return_types=("CLIP",),
-            op_id="echo",
-        )
-
-
-def test_unfilled_vae_raises():
-    with pytest.raises(OutputNotProducedError):
-        _pad_outputs(
-            op_result=(),
-            output_indices=(),
-            return_types=("VAE",),
-            op_id="echo",
-        )
+        assert result == (None,), f"opaque type {opaque} should pad to None"
 
 
 def test_out_of_range_output_index_raises_value_error():

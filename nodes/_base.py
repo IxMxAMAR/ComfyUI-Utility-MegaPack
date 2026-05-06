@@ -111,7 +111,12 @@ def _default_for_type(type_name: str, op_id: str):
     if type_name == "DICT":
         return {}
     if type_name in ("MODEL", "CLIP", "VAE"):
-        raise OutputNotProducedError(slot_name=type_name, op_id=op_id)
+        # Opaque types — return None and let ComfyUI's runtime raise a clear error
+        # at the wiring level if a downstream node tries to use None as a model.
+        # We don't have visibility into which output sockets are wired at this
+        # layer, so eager raising here would break valid workflows that produce
+        # only the non-opaque outputs.
+        return None
     if type_name == "IMAGE":
         import torch
 
