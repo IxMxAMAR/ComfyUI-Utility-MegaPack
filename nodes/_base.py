@@ -148,3 +148,20 @@ def _pad_outputs(
         if i not in filled:
             out[i] = _default_for_type(type_name, op_id=op_id)
     return tuple(out)
+
+
+THEME_CHOICES: list[str] = [
+    "(use pack default)",
+    "(use ComfyUI default)",
+    "cyberpunk",
+    "minimalist",
+    "glassmorphic",
+    "retro_terminal",
+    "default",
+    "holographic",
+    "paper_ink",
+    "brutalist",
+    "solarized_dark",
+    "dracula",
+    "high_contrast",
+]
