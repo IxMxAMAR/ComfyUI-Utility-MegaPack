@@ -10,4 +10,4 @@ Drop this directory into `ComfyUI/custom_nodes/` and restart ComfyUI.
 
 ## Documentation
 
-- [Design spec](../../RD/docs/superpowers/specs/2026-05-06-utility-megapack-design.md)
+Operation reference and theming guide will be auto-generated under `docs/` once the foundation tasks land.
