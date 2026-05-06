@@ -9,6 +9,7 @@ from nodes.programming.operations import (  # noqa: E402, F401
     _smoke,
     encoding,
     logic_bits,
+    math_signals,
 )
 
 
