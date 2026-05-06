@@ -11,6 +11,7 @@ from nodes.programming.operations import (  # noqa: E402, F401
     logic_bits,
     math_signals,
     text,
+    data_struct,
 )
 
 
