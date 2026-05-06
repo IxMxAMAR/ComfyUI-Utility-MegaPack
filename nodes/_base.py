@@ -165,3 +165,43 @@ THEME_CHOICES: list[str] = [
     "dracula",
     "high_contrast",
 ]
+
+
+class MegaPackNodeBase:
+    """Shared base class for all Utility-MegaPack node classes.
+
+    Subclasses must set:
+      - REGISTRY: an OpRegistry instance
+      - RETURN_TYPES: tuple of ComfyUI output type names
+      - RETURN_NAMES: tuple of socket display names
+    """
+
+    REGISTRY: OpRegistry = None  # type: ignore[assignment]
+    RETURN_TYPES: tuple = ()
+    RETURN_NAMES: tuple = ()
+    FUNCTION = "process"
+    CATEGORY = "Utility-MegaPack"
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        if cls.REGISTRY is None:
+            raise RuntimeError(f"{cls.__name__}.REGISTRY is not set")
+
+        op_ids = cls.REGISTRY.all_op_ids()
+        if not op_ids:
+            raise RuntimeError(f"{cls.__name__}.REGISTRY has no registered operations")
+
+        required: dict = {"mode": (op_ids, {"default": op_ids[0]})}
+        optional: dict = {}
+
+        for op in cls.REGISTRY.ops.values():
+            for section_key in ("required", "optional"):
+                for widget_name, widget_def in op.input_schema.get(section_key, {}).items():
+                    # Per-op widgets all live in optional. JS hides the irrelevant ones per mode.
+                    if widget_name not in optional:
+                        optional[widget_name] = widget_def
+
+        # Theme widget last in required.
+        required["theme"] = (THEME_CHOICES, {"default": "(use pack default)"})
+
+        return {"required": required, "optional": optional}
