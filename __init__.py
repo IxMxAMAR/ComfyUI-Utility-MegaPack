@@ -8,12 +8,14 @@ from nodes.smoke import SmokeTestNode
 from nodes.programming import ProgrammingNode
 from nodes.prompt import PromptNode
 from nodes.image_pro import ImageProNode
+from nodes.mask_latent import MaskLatentNode
 
 NODE_CLASS_MAPPINGS: dict = {
     "UtilMegaPack_SmokeTest": SmokeTestNode,
     "UtilMegaPack_Programming": ProgrammingNode,
     "UtilMegaPack_Prompt": PromptNode,
     "UtilMegaPack_ImagePro": ImageProNode,
+    "UtilMegaPack_MaskLatent": MaskLatentNode,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS: dict = {
@@ -21,6 +23,7 @@ NODE_DISPLAY_NAME_MAPPINGS: dict = {
     "UtilMegaPack_Programming": "Programming",
     "UtilMegaPack_Prompt": "Prompt",
     "UtilMegaPack_ImagePro": "Image Pro",
+    "UtilMegaPack_MaskLatent": "Mask & Latent",
 }
 
 WEB_DIRECTORY = "./web"
