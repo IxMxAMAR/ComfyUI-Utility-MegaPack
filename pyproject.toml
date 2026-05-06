@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "comfyui-utility-megapack"
 version = "0.1.0"
-description = "Comprehensive ComfyUI utility node pack with ~165 operations and 11 swappable themes."
+description = "Comprehensive ComfyUI utility node pack with 156 operations across 7 nodes and 11 swappable visual themes."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -33,6 +33,11 @@ dev = [
     "pytest-cov>=4.1",
 ]
 
+[project.urls]
+Repository = "https://github.com/IxMxAMAR/ComfyUI-Utility-MegaPack"
+Issues = "https://github.com/IxMxAMAR/ComfyUI-Utility-MegaPack/issues"
+Changelog = "https://github.com/IxMxAMAR/ComfyUI-Utility-MegaPack/blob/main/CHANGELOG.md"
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["nodes*", "shared*"]
@@ -41,3 +46,9 @@ include = ["nodes*", "shared*"]
 testpaths = ["tests"]
 pythonpath = ["."]
 addopts = "-v --tb=short"
+
+# ComfyUI Registry — see https://docs.comfy.org/registry/publishing
+[tool.comfy]
+PublisherId = "ixmxamar"
+DisplayName = "Utility-MegaPack"
+Icon = ""
