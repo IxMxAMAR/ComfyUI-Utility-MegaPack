@@ -205,3 +205,32 @@ class MegaPackNodeBase:
         required["theme"] = (THEME_CHOICES, {"default": "(use pack default)"})
 
         return {"required": required, "optional": optional}
+
+    def process(self, *, mode: str, theme: str, **op_inputs) -> tuple:
+        """Dispatch to the registered op identified by `mode`.
+
+        `theme` is accepted for ComfyUI widget-binding but ignored on the Python side
+        — themes are applied client-side by the JS theme engine.
+        """
+        op = self.REGISTRY.ops.get(mode)
+        if op is None:
+            raise RuntimeError(
+                f"unknown mode '{mode}' on {type(self).__name__} "
+                f"(registered: {self.REGISTRY.all_op_ids()})"
+            )
+
+        try:
+            op_result = op.callable(self, **op_inputs)
+        except OutputNotProducedError:
+            raise
+        except Exception as exc:
+            raise RuntimeError(
+                f"[{type(self).__name__}/{op.op_id}] {exc}"
+            ) from exc
+
+        return _pad_outputs(
+            op_result=op_result,
+            output_indices=op.output_indices,
+            return_types=self.RETURN_TYPES,
+            op_id=op.op_id,
+        )
