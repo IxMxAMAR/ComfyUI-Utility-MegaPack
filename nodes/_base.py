@@ -1,5 +1,8 @@
 """Base class, registry, and shared types for Utility-MegaPack nodes."""
 
+from dataclasses import dataclass
+from typing import Callable
+
 
 class AnyType(str):
     """ComfyUI wildcard type.
@@ -14,3 +17,16 @@ class AnyType(str):
 
 
 ANY = AnyType("*")
+
+
+@dataclass
+class OpDef:
+    """One registered operation on a node."""
+
+    op_id: str
+    display_name: str
+    category: str
+    callable: Callable
+    input_schema: dict
+    output_indices: tuple
+    description: str = ""
