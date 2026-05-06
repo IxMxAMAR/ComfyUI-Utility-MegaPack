@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comfyui-utility-megapack"
+version = "0.1.0"
+description = "Comprehensive ComfyUI utility node pack with ~165 operations and 11 swappable themes."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "IxMxAMAR"}]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "numpy>=1.24,<3",
+    "Pillow>=10.0,<12",
+    "requests>=2.31,<3",
+    "simpleeval>=0.9,<2",
+    "Jinja2>=3.1,<4",
+    "PyYAML>=6.0,<7",
+    "cryptography>=42.0,<46",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-mock>=3.12",
+    "pytest-cov>=4.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nodes*", "shared*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v --tb=short"
