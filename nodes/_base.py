@@ -76,3 +76,15 @@ class OpRegistry:
 
     def all_op_ids(self) -> list[str]:
         return sorted(self.ops.keys())
+
+
+class OutputNotProducedError(RuntimeError):
+    """Raised when a workflow wires an opaque output (MODEL/CLIP/VAE) that the active mode does not produce."""
+
+    def __init__(self, *, slot_name: str, op_id: str) -> None:
+        self.slot_name = slot_name
+        self.op_id = op_id
+        super().__init__(
+            f"Operation '{op_id}' does not produce a '{slot_name}' output — "
+            f"disconnect that slot or pick a different mode."
+        )
