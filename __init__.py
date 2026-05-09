@@ -4,6 +4,16 @@ ComfyUI imports this module and reads NODE_CLASS_MAPPINGS,
 NODE_DISPLAY_NAME_MAPPINGS, and WEB_DIRECTORY.
 """
 
+# ComfyUI loads custom nodes via spec_from_file_location, which does NOT add the
+# package's own directory to sys.path. Without this our absolute imports
+# (`from nodes._base import ...`, `from shared.conversions import ...`) fail with
+# ModuleNotFoundError. Inject the package directory once at import time.
+import os as _os
+import sys as _sys
+_HERE = _os.path.dirname(_os.path.abspath(__file__))
+if _HERE not in _sys.path:
+    _sys.path.insert(0, _HERE)
+
 from nodes.smoke import SmokeTestNode
 from nodes.programming import ProgrammingNode
 from nodes.prompt import PromptNode
