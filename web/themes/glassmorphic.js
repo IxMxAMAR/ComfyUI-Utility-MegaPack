@@ -9,6 +9,22 @@ export default {
     titletext: "#ffffff",
     boxcolor: "#c084fc",
   },
+  wirePalette: {
+    default: "#c084fc",
+    IMAGE: "#a78bfa",
+    LATENT: "#c084fc",
+    MASK: "#ffffff",
+    CONDITIONING: "#fbbf24",
+    MODEL: "#f472b6",
+  },
+  categoryAccents: {
+    image: "#a78bfa",
+    latent: "#c084fc",
+    conditioning: "#fbbf24",
+    default: "#c084fc",
+  },
+  groupColors: { color: "#c084fc", bgcolor: "#241b66" },
+  bgGridColor: "#1b1356",
   drawForeground(ctx, node, themeApi) {
     if (!themeApi || !themeApi.motionAllowed("low")) return;
     const w = node.size?.[0] ?? 0;

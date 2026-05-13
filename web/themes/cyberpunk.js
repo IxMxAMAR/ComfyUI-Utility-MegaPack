@@ -9,6 +9,22 @@ export default {
     titletext: "#00f0ff",
     boxcolor: "#ff2d92",
   },
+  wirePalette: {
+    default: "#ff2d92",
+    IMAGE: "#00f0ff",
+    LATENT: "#c084fc",
+    MASK: "#ffffff",
+    CONDITIONING: "#ffea00",
+    MODEL: "#ff5e5e",
+  },
+  categoryAccents: {
+    image: "#00f0ff",
+    latent: "#c084fc",
+    conditioning: "#ffea00",
+    default: "#ff2d92",
+  },
+  groupColors: { color: "#ff2d92", bgcolor: "#1a0a2a" },
+  bgGridColor: "#080411",
   // Cheap "fake glow" using two strokes with global alpha instead of
   // ctx.shadowBlur. shadowBlur is one of the most expensive canvas ops
   // (forces an offscreen Gaussian convolution per draw) and ate ~50ms/frame

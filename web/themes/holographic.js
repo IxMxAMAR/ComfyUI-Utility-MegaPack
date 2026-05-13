@@ -11,6 +11,22 @@ export default {
     titletext: "#ffffff",
     boxcolor: "#c77dff",
   },
+  wirePalette: {
+    default: "#c77dff",
+    IMAGE: "#06ffa5",
+    LATENT: "#ff006e",
+    MASK: "#ffffff",
+    CONDITIONING: "#ffbe0b",
+    MODEL: "#00b4d8",
+  },
+  categoryAccents: {
+    image: "#06ffa5",
+    latent: "#ff006e",
+    conditioning: "#ffbe0b",
+    default: "#c77dff",
+  },
+  groupColors: { color: "#c77dff", bgcolor: "#1a1140" },
+  bgGridColor: "#08051a",
   drawForeground(ctx, node, themeApi) {
     const w = node.size?.[0] ?? 0;
     const h = node.size?.[1] ?? 0;

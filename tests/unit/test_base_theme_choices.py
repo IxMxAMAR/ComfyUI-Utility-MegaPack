@@ -13,18 +13,21 @@ def test_first_two_entries_are_pack_and_comfyui_defaults():
     assert THEME_CHOICES[1] == "(use ComfyUI default)"
 
 
-def test_all_eleven_themes_present():
+def test_all_fifteen_themes_present():
     expected = {
+        # v0.1 originals
         "cyberpunk", "minimalist", "glassmorphic", "retro_terminal",
         "default", "holographic", "paper_ink", "brutalist",
         "solarized_dark", "dracula", "high_contrast",
+        # v0.2 additions
+        "blueprint", "nord", "synthwave", "e_ink",
     }
     assert expected.issubset(set(THEME_CHOICES))
 
 
-def test_total_count_is_thirteen():
-    """Two placeholders + eleven themes = thirteen entries."""
-    assert len(THEME_CHOICES) == 13
+def test_total_count_is_seventeen():
+    """Two placeholders + fifteen themes = seventeen entries (v0.2.0)."""
+    assert len(THEME_CHOICES) == 17
 
 
 def test_no_duplicates():

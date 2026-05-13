@@ -191,6 +191,11 @@ THEME_CHOICES: list[str] = [
     "solarized_dark",
     "dracula",
     "high_contrast",
+    # v0.2.0 additions
+    "blueprint",
+    "nord",
+    "synthwave",
+    "e_ink",
 ]
 
 

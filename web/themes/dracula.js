@@ -9,6 +9,25 @@ export default {
     titletext: "#282a36",
     boxcolor: "#8be9fd",
   },
+  wirePalette: {
+    default: "#bd93f9",
+    IMAGE: "#8be9fd",       // cyan
+    LATENT: "#bd93f9",      // purple
+    MASK: "#f8f8f2",        // foreground
+    CONDITIONING: "#f1fa8c", // yellow
+    MODEL: "#ff79c6",       // pink
+    CLIP: "#ffb86c",        // orange
+  },
+  categoryAccents: {
+    image: "#8be9fd",
+    latent: "#bd93f9",
+    conditioning: "#f1fa8c",
+    sampling: "#50fa7b",
+    loaders: "#ffb86c",
+    default: "#ff79c6",
+  },
+  groupColors: { color: "#bd93f9", bgcolor: "#21222c" },
+  bgGridColor: "#1e1f29",
   // Soft purple outline via two strokes — replaces the previous ctx.shadowBlur
   // approach which became unusable under globalOverrideEnabled in v0.1.2.
   drawForeground(ctx, node, themeApi) {

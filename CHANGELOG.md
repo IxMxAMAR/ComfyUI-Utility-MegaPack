@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] — 2026-05-06
+
+Major feature release: wire/connection theming, 4 new themes, per-node-category accent stripes, offscreen-canvas pattern caching, and group/grid color sync. Scope informed by a second Gemini Pro code review.
+
+### Added — Wires (connections / "spaghetti noodles")
+- **Per-theme wire color palette.** Themes declare `wirePalette: { default, IMAGE, LATENT, MASK, ... }`. On apply, ComfyUI's `app.canvas.default_connection_color_byType` is mutated to match. Originals snapshotted and restored when the theme changes.
+- **Wire render-mode dropdown.** New setting `Utility-MegaPack — Wire render mode` lets you choose straight / linear / bezier / manhattan globally. `0` (default) leaves ComfyUI's own setting alone.
+- **Wire thickness multiplier.** New setting (default `1.0`) scales `ctx.lineWidth` on every link draw via a one-time `LGraphCanvas.prototype.renderLink` wrap. ComfyUI's native execution-flow dots are preserved (the wrap calls the original).
+- **Wire opacity slider.** New setting (`0.0` – `1.0`) multiplies `ctx.globalAlpha`.
+
+### Added — 4 new themes (15 total)
+- **Blueprint** — cyanotype schematic, cached faint white grid overlay
+- **Nord** — frosted arctic, muted aurora palette
+- **Synthwave** — 80s retro-futurism, pink→purple header gradient + cyan neon outline (no `shadowBlur`)
+- **E-Ink** — pure monochrome, sparse dithered noise overlay (cached)
+
+### Added — Per-node-category accent stripes
+- Themes can declare `categoryAccents: { image, latent, conditioning, sampling, loaders, default }`. The theme engine draws a 4-px colored stripe on the left edge of each node based on `node.constructor.category`. Matches the first path segment (case-insensitive), so `"image/upscaling"` and `"image"` both get the `image` accent.
+
+### Added — Group color & canvas background sync
+- Themes declare `groupColors: { color, bgcolor }` and `bgGridColor`. On apply, `app.graph._groups` are repainted and `app.canvas.clear_background_color` is set. Originals snapshotted and restored.
+
+### Performance
+- **OffscreenCanvas pattern cache** (`web/cache.js`). Static expensive draws — Retro Terminal scanlines, Blueprint grid, E-Ink noise — render once per `(themeId, width, height)` to an offscreen canvas and blit with a single `drawImage` thereafter. Per-node frame cost for these themes drops from O(node-area) to O(1).
+- Wire-engine fast path: when `wireThickness === 1.0` and `wireOpacity === 1.0`, the wrap calls the original `renderLink` directly with zero extra `save`/`restore`.
+
+### Theme schema bumped to v2
+- Themes that declare any of `wirePalette` / `categoryAccents` / `groupColors` / `bgGridColor` should set `themeApiVersion: 2`. v1 themes still load — fields are simply not applied.
+
+### Tests
+- Python: **340 / 340** passing (was 340, plus an updated `test_total_count_is_seventeen` for the 15-theme list)
+- JS: **33 / 33** passing (was 26, plus 7 new for `resolveCategoryAccent`)
+
 ## [0.1.3] — 2026-05-06
 
 ### Fixed — Performance

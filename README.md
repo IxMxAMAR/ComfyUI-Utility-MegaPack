@@ -36,7 +36,7 @@ All nodes appear under the `Utility-MegaPack/` menu in ComfyUI. Each node has a 
 
 ## Themes
 
-Eleven themes ship in the box. Each can be applied per-node via the `theme` widget at the bottom of every Utility-MegaPack node, or pack-wide / ComfyUI-wide via the sidebar settings.
+Fifteen themes ship in the box. Each can be applied per-node via the `theme` widget at the bottom of every Utility-MegaPack node, or pack-wide / ComfyUI-wide via the sidebar settings.
 
 | Theme | Look |
 |---|---|
@@ -51,6 +51,18 @@ Eleven themes ship in the box. Each can be applied per-node via the `theme` widg
 | `solarized_dark` | Ethan Schoonover's dev colorscheme |
 | `dracula` | Famous purple+pink+cyan dark theme with halo glow |
 | `high_contrast` | Pure white/black + safety yellow, WCAG AAA-ready |
+| `blueprint` | Cyanotype schematic, faint white grid overlay |
+| `nord` | Frosted arctic, muted aurora palette |
+| `synthwave` | 80s retro-futurism, pink→purple gradient + cyan neon |
+| `e_ink` | Pure monochrome, sparse dithered noise overlay |
+
+### Wires & customizations (v0.2.0)
+
+- **Theme-synced wire colors.** Each theme can declare a per-data-type wire palette (e.g. Cyberpunk paints IMAGE wires cyan and LATENT wires purple). Mutated on `app.canvas.default_connection_color_byType` and restored when you switch themes.
+- **Wire render mode.** Setting → choose between straight, linear, bezier, or manhattan routing globally.
+- **Wire thickness + opacity.** Settings → multiplier on `ctx.lineWidth` and `ctx.globalAlpha`. ComfyUI's native execution-flow dots are preserved.
+- **Per-node-category accent stripes.** 4-pixel colored bar on the left edge of each node, color picked from `node.constructor.category` (e.g. all `image/*` nodes get the theme's image accent, all `latent/*` get the latent accent).
+- **Group colors + canvas background** track the active theme.
 
 Settings under `megapack.*` in the ComfyUI sidebar:
 - `packDefault` — theme used when a node's widget is `(use pack default)`
@@ -58,7 +70,10 @@ Settings under `megapack.*` in the ComfyUI sidebar:
 - `globalTheme` — theme used for the global override
 - `respectExistingCustomDrawing` — skip nodes from other extensions (rgthree, KJNodes, etc.) that already do their own drawing
 - `reduceMotion` — disable animation for accessibility / performance
-- `heavyThemeNodeBudget` — animations skip when more than N themed nodes are visible (default 60)
+- `heavyThemeNodeBudget` — animations skip when more than N themed nodes are visible (default 25)
+- `wireRenderMode` — straight / linear / bezier / manhattan
+- `wireThickness` — multiplier on link line width
+- `wireOpacity` — link alpha 0.0 – 1.0
 
 ## Resolution cascade
 
