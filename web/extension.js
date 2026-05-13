@@ -33,7 +33,10 @@ const settings = {
   globalTheme: "default",
   respectExistingCustomDrawing: true,
   reduceMotion: false,
-  heavyThemeNodeBudget: 60,
+  // Lowered from 60 in v0.1.3 — even with the cheaper stroke-based glow,
+  // running animated themes across 25+ nodes per frame can dent framerate
+  // on lower-end GPUs. Raise this manually if you're on a beefy machine.
+  heavyThemeNodeBudget: 25,
 };
 
 const themedNodes = new Set();

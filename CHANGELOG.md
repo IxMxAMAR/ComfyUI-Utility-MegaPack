@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] — 2026-05-06
+
+### Fixed — Performance
+- **Canvas lag with global override + animated themes.** Cyberpunk and Dracula previously used `ctx.shadowBlur` (12–14 px Gaussian convolution per draw), which is one of the most expensive HTML canvas operations. With `globalOverrideEnabled = true`, every visible node drew a shadow-blurred rectangle every frame, dropping framerate to single digits on graphs with 20+ nodes. v0.1.3 replaces the shadow with a two-pass strokeRect (wide low-alpha outer line + thin core line) — visually nearly identical, ~100× cheaper.
+- **`heavyThemeNodeBudget` default lowered from 60 → 25.** Even with the cheaper draw path, animated motion gets suppressed sooner on heavy graphs. Raise manually if your GPU is comfortable.
+
 ## [0.1.2] — 2026-05-06
 
 This release fixes a critical loader bug from 0.1.1 plus 6 issues surfaced by an outside code review.
