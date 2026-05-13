@@ -59,14 +59,23 @@ function reapplyAll() {
   for (const node of app.graph._nodes) applyResolved(node);
 }
 
-function defineSetting(id, name, type, defaultValue, onChange) {
-  app.ui.settings.addSetting({
+// Theme IDs available as combo options. Kept in sync with registered themes.
+const THEME_OPTIONS = registry.ids();
+
+function defineSetting(id, name, type, defaultValue, onChange, options) {
+  const setting = {
     id: `megapack.${id}`,
     name,
     type,
     defaultValue,
     onChange,
-  });
+  };
+  // ComfyUI's settings API requires `options` for combo-type settings;
+  // without it the dropdown renders empty (Gemini review #4).
+  if (type === "combo" && Array.isArray(options)) {
+    setting.options = options;
+  }
+  app.ui.settings.addSetting(setting);
 }
 
 app.registerExtension({
@@ -75,13 +84,15 @@ app.registerExtension({
   async setup() {
     defineSetting("packDefault", "Utility-MegaPack — Pack default theme", "combo",
       "default",
-      (v) => { settings.packDefault = v; reapplyAll(); });
+      (v) => { settings.packDefault = v; reapplyAll(); },
+      THEME_OPTIONS);
     defineSetting("globalOverrideEnabled", "Utility-MegaPack — Theme ALL ComfyUI nodes", "boolean",
       false,
       (v) => { settings.globalOverrideEnabled = v; reapplyAll(); });
     defineSetting("globalTheme", "Utility-MegaPack — Global theme", "combo",
       "default",
-      (v) => { settings.globalTheme = v; reapplyAll(); });
+      (v) => { settings.globalTheme = v; reapplyAll(); },
+      THEME_OPTIONS);
     defineSetting("respectExistingCustomDrawing", "Utility-MegaPack — Respect existing custom drawing", "boolean",
       true,
       (v) => { settings.respectExistingCustomDrawing = v; reapplyAll(); });

@@ -5,7 +5,7 @@ import json
 import pytest
 import torch
 
-from nodes.convenience import ConvenienceNode
+from mp_nodes.convenience import ConvenienceNode
 
 
 def run(mode, **kwargs):

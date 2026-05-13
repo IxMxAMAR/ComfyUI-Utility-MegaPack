@@ -1,6 +1,6 @@
 """Tests for MegaPackNodeBase.INPUT_TYPES — the union builder."""
 
-from nodes._base import MegaPackNodeBase, OpRegistry, THEME_CHOICES
+from mp_nodes._base import MegaPackNodeBase, OpRegistry, THEME_CHOICES
 
 
 def _make_two_op_registry():

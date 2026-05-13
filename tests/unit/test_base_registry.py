@@ -2,7 +2,7 @@
 
 import pytest
 
-from nodes._base import OpRegistry
+from mp_nodes._base import OpRegistry
 
 
 def test_register_stores_op_by_id():

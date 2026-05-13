@@ -7,7 +7,7 @@ import pytest
 import torch
 from PIL import Image
 
-from nodes.image_pro import ImageProNode
+from mp_nodes.image_pro import ImageProNode
 
 
 def run(mode, **kwargs):

@@ -5,7 +5,7 @@ import hmac as _hmac
 
 import pytest
 
-from nodes.programming import ProgrammingNode
+from mp_nodes.programming import ProgrammingNode
 
 
 def run(mode, **kwargs):
@@ -79,7 +79,17 @@ class TestAES:
         with pytest.raises(RuntimeError, match="too short"):
             run("aes_decrypt", ciphertext_b64="dGlueQ==", key="anything")
 
-    def test_aes_two_encrypts_differ_due_to_random_nonce(self):
+    def test_aes_two_encrypts_differ_due_to_random_salt_and_nonce(self):
         a = run("aes_encrypt", plaintext="same input", key="same key")[0]
         b = run("aes_encrypt", plaintext="same input", key="same key")[0]
         assert a != b
+
+    def test_aes_v0_1_x_format_rejected_with_clear_error(self):
+        """Old HKDF-format ciphertexts (no salt prefix) are too short for the new layout."""
+        # 12-byte nonce + 16-byte tag minimum from the old format = 28 bytes;
+        # the new format expects salt[16] + nonce[12] + tag[16] = 44 bytes minimum.
+        # An old 28-byte ciphertext must fail with the clearer length error.
+        old_format = b"x" * 28
+        import base64
+        with pytest.raises(RuntimeError, match="too short"):
+            run("aes_decrypt", ciphertext_b64=base64.b64encode(old_format).decode(), key="any")

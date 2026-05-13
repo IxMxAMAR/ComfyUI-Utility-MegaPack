@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from nodes._base import ANY, _pad_outputs
+from mp_nodes._base import ANY, _pad_outputs
 
 
 def test_filled_indices_use_provided_values():
@@ -100,16 +100,18 @@ def test_unfilled_mask_defaults_to_1x1_zero_tensor():
     assert torch.all(result[0] == 0)
 
 
-def test_unfilled_latent_defaults_to_empty_4_8_8():
+def test_unfilled_latent_defaults_to_empty_dict():
+    """LATENT pads to {} (no 'samples') so downstream sees a clean 'missing samples' error.
+
+    The old hardcoded (1, 4, 8, 8) default broke 16-channel models (Flux/SD3).
+    """
     result = _pad_outputs(
         op_result=(),
         output_indices=(),
         return_types=("LATENT",),
         op_id="x",
     )
-    assert isinstance(result[0], dict)
-    assert "samples" in result[0]
-    assert result[0]["samples"].shape == (1, 4, 8, 8)
+    assert result[0] == {}
 
 
 def test_unfilled_wildcard_defaults_to_none():

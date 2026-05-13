@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "comfyui-utility-megapack"
-version = "0.1.1"
+version = "0.1.2"
 description = "Comprehensive ComfyUI utility node pack with 156 operations across 7 nodes and 11 swappable visual themes."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -40,7 +40,7 @@ Changelog = "https://github.com/IxMxAMAR/ComfyUI-Utility-MegaPack/blob/main/CHAN
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["nodes*", "shared*"]
+include = ["mp_nodes*", "mp_shared*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

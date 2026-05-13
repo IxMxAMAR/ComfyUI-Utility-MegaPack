@@ -1,6 +1,6 @@
 """Tests for the AnyType wildcard used to mark wildcard ComfyUI sockets."""
 
-from nodes._base import ANY, AnyType
+from mp_nodes._base import ANY, AnyType
 
 
 def test_anytype_is_string_subclass():

@@ -5,7 +5,7 @@ import struct
 
 import pytest
 
-from nodes.models_sampling import ModelsSamplingNode
+from mp_nodes.models_sampling import ModelsSamplingNode
 
 
 def run(mode, **kwargs):

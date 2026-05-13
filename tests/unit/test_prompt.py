@@ -5,7 +5,7 @@ import tempfile
 
 import pytest
 
-from nodes.prompt import PromptNode
+from mp_nodes.prompt import PromptNode
 
 
 def run(mode, **kwargs):

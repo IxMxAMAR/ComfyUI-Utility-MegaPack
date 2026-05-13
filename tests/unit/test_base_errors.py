@@ -1,6 +1,6 @@
 """Tests for OutputNotProducedError — raised when opaque-type slots are wired but unfilled."""
 
-from nodes._base import OutputNotProducedError
+from mp_nodes._base import OutputNotProducedError
 
 
 def test_error_is_runtime_error_subclass():

@@ -2,7 +2,7 @@
 
 import pytest
 
-from nodes._base import MegaPackNodeBase, OpRegistry
+from mp_nodes._base import MegaPackNodeBase, OpRegistry
 
 
 def _make_one_op_node():

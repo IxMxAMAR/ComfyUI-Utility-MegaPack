@@ -1,6 +1,6 @@
 """Tests for THEME_CHOICES — the dropdown values for the per-node theme widget."""
 
-from nodes._base import THEME_CHOICES
+from mp_nodes._base import THEME_CHOICES
 
 
 def test_theme_choices_is_list_of_strings():

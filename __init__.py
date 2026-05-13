@@ -4,24 +4,24 @@ ComfyUI imports this module and reads NODE_CLASS_MAPPINGS,
 NODE_DISPLAY_NAME_MAPPINGS, and WEB_DIRECTORY.
 """
 
-# ComfyUI loads custom nodes via spec_from_file_location, which does NOT add the
-# package's own directory to sys.path. Without this our absolute imports
-# (`from nodes._base import ...`, `from shared.conversions import ...`) fail with
-# ModuleNotFoundError. Inject the package directory once at import time.
+# ComfyUI loads custom nodes via spec_from_file_location, which does NOT add
+# the package's own directory to sys.path. Inject the package directory once at
+# import time. We use `mp_*` prefixed package names so this injection cannot
+# shadow ComfyUI core's `nodes` module (which is what broke v0.1.1).
 import os as _os
 import sys as _sys
 _HERE = _os.path.dirname(_os.path.abspath(__file__))
 if _HERE not in _sys.path:
     _sys.path.insert(0, _HERE)
 
-from nodes.smoke import SmokeTestNode
-from nodes.programming import ProgrammingNode
-from nodes.prompt import PromptNode
-from nodes.image_pro import ImageProNode
-from nodes.mask_latent import MaskLatentNode
-from nodes.io_workflow import IOWorkflowNode
-from nodes.convenience import ConvenienceNode
-from nodes.models_sampling import ModelsSamplingNode
+from mp_nodes.smoke import SmokeTestNode
+from mp_nodes.programming import ProgrammingNode
+from mp_nodes.prompt import PromptNode
+from mp_nodes.image_pro import ImageProNode
+from mp_nodes.mask_latent import MaskLatentNode
+from mp_nodes.io_workflow import IOWorkflowNode
+from mp_nodes.convenience import ConvenienceNode
+from mp_nodes.models_sampling import ModelsSamplingNode
 
 NODE_CLASS_MAPPINGS: dict = {
     "UtilMegaPack_SmokeTest": SmokeTestNode,

@@ -3,7 +3,7 @@
 import pytest
 import torch
 
-from nodes.mask_latent import MaskLatentNode
+from mp_nodes.mask_latent import MaskLatentNode
 
 
 def run(mode, **kwargs):

@@ -1,6 +1,6 @@
 """Tests for OpDef — the dataclass that describes one registered operation."""
 
-from nodes._base import OpDef
+from mp_nodes._base import OpDef
 
 
 def _noop(self):

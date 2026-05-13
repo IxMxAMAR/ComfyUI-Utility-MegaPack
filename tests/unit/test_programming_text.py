@@ -2,7 +2,7 @@
 
 import pytest
 
-from nodes.programming import ProgrammingNode
+from mp_nodes.programming import ProgrammingNode
 
 
 def run(mode, **kwargs):

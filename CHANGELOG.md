@@ -5,10 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] — 2026-05-06
+
+This release fixes a critical loader bug from 0.1.1 plus 6 issues surfaced by an outside code review.
+
+### Fixed — Critical loader collision
+- **`'nodes' is not a package` at ComfyUI startup.** v0.1.1 attempted to fix the import error by injecting our package directory into `sys.path`, but ComfyUI's core ships its own `nodes.py` module. Since `sys.modules['nodes']` was already populated with ComfyUI's `nodes.py` (a single-file module), our absolute imports like `from nodes.smoke import ...` resolved to that module and failed because it has no `.smoke` attribute. **Fix:** renamed internal packages from `nodes/` → `mp_nodes/` and `shared/` → `mp_shared/` so our path injection cannot shadow ComfyUI core.
+
+### Fixed — Security
+- **`http_post` no longer reads unbounded responses into memory.** Previous version called `requests.post(...)` and checked `len(resp.content)` after the full body buffered. v0.1.2 streams with `iter_content` and enforces the 50 MB cap mid-stream, matching `http_get`. (DoS protection.)
+- **AES key derivation switched from HKDF (no work factor) to PBKDF2-HMAC-SHA256 with 600,000 iterations and a random per-encryption salt.** Ciphertext format is now base64(salt[16] ‖ nonce[12] ‖ tag+ct). Old v0.1.x ciphertexts are not decryptable by 0.1.2+.
+- **`fs_mkdir`, `fs_copy`, `fs_move`, `fs_delete` now reject paths outside the allow-list** (ComfyUI input/output/temp + user home). Override with `UTILITY_MEGAPACK_ALLOW_ARBITRARY_PATHS=1` if needed. Closes a host-wide read/write/delete vulnerability when ComfyUI is exposed over a network.
+
+### Fixed — UX / correctness
+- **Settings dropdowns** for "Pack default theme" and "Global theme" now declare `options` so ComfyUI renders the actual list instead of an empty combo.
+- **LATENT default pad changed from a hardcoded (1, 4, 8, 8) zero tensor to `{}` empty dict.** SD3 / Flux use 16-channel latents; the old default caused cryptic shape mismatches downstream. Now downstream nodes see a clean missing-key error.
+- **`@op` decorator now rejects widget names `mode` and `theme` at registration time.** These collided with framework kwargs and surfaced as cryptic runtime "multiple values for argument" errors only when the op was first invoked.
+- **`_pad_outputs` docstring** updated to match the relaxed opaque-type behavior introduced in 0.1.1.
+
 ## [0.1.1] — 2026-05-06
 
 ### Fixed
-- ComfyUI loader compatibility: inject the package directory into `sys.path` at import time so `from nodes._base import ...` and `from shared.conversions import ...` resolve under ComfyUI's `spec_from_file_location` loader (was failing with `ModuleNotFoundError: No module named 'nodes'` at startup).
+- ComfyUI loader compatibility: inject the package directory into `sys.path` at import time so `from nodes._base import ...` and `from shared.conversions import ...` resolve under ComfyUI's `spec_from_file_location` loader. **(Insufficient — superseded by the package rename in 0.1.2; see above.)**
 
 ## [0.1.0] — 2026-05-06
 
