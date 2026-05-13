@@ -14,3 +14,5 @@ dist/
 Thumbs.db
 node_modules/
 *.tsbuildinfo
+# comfy-cli node publish builds this temporarily
+node.zip
