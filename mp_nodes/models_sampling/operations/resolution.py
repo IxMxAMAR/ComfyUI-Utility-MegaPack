@@ -49,7 +49,12 @@ def aspect_ratio_pick(self, preset, long_side=1024):
     else:
         h = int(long_side)
         w = int(round(long_side * rw / rh))
-    info = {"preset": preset, "ratio": [rw, rh], "width": w, "height": h}
+    # Snap to multiples of 8 — SD UNet/VAE require this (typically /8 or /64).
+    # Without snapping, long_side=1000 + 16:9 produced 1000×562 which crashed
+    # the model.
+    w = max(8, (w // 8) * 8)
+    h = max(8, (h // 8) * 8)
+    info = {"preset": preset, "ratio": [rw, rh], "width": w, "height": h, "snapped_to": 8}
     return (w, h, info)
 
 

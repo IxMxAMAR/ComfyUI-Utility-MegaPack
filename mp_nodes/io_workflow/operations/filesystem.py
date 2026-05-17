@@ -8,10 +8,11 @@ import shutil
 from .. import op
 
 
-# Path confinement for write/delete ops. Gemini review #7: previous version
-# accepted any absolute path → host-wide read/write if ComfyUI was exposed.
-# Default allow-list: ComfyUI input/output/temp + user home. Override with
-# the env var UTILITY_MEGAPACK_ALLOW_ARBITRARY_PATHS=1 for power users.
+# Path confinement for write/delete ops. v0.2.0 mistakenly included the user's
+# home directory in the allow-list, which meant a shared workflow could
+# silently delete `~/.ssh/id_rsa`, overwrite `~/.bashrc`, etc. v0.3.0 restricts
+# the allow-list to ComfyUI's input / output / temp roots only. Power users who
+# need broader access set UTILITY_MEGAPACK_ALLOW_ARBITRARY_PATHS=1.
 def _confined_roots() -> list[str]:
     roots: list[str] = []
     try:
@@ -28,15 +29,18 @@ def _confined_roots() -> list[str]:
             os.path.abspath("output"),
             os.path.abspath("temp"),
         ])
-    roots.append(os.path.expanduser("~"))
+    # NOTE: do NOT add the user's home dir here — see SECURITY note above.
     return [os.path.abspath(r) for r in roots if r]
 
 
 def _path_is_confined(target: str) -> bool:
-    abs_target = os.path.abspath(target)
+    # normcase handles Windows case-insensitive paths and forward/back slashes,
+    # so `c:\comfyui\input` matches a root registered as `C:\ComfyUI\input`.
+    abs_target = os.path.normcase(os.path.abspath(target))
     for root in _confined_roots():
+        norm_root = os.path.normcase(root)
         try:
-            if os.path.commonpath([abs_target, root]) == root:
+            if os.path.commonpath([abs_target, norm_root]) == norm_root:
                 return True
         except ValueError:
             continue
@@ -49,7 +53,7 @@ def _require_confined(path: str) -> None:
     if not _path_is_confined(path):
         raise PermissionError(
             f"path {path!r} is outside the allow-listed roots "
-            f"(ComfyUI input/output/temp, user home). "
+            f"(ComfyUI input / output / temp). "
             f"Set UTILITY_MEGAPACK_ALLOW_ARBITRARY_PATHS=1 to override (use with care)."
         )
 

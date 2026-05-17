@@ -53,6 +53,11 @@ def mask_from_color(self, image, r, g, b, tolerance=0.05):
     description="Min pooling erodes the mask (shrinks white regions).",
 )
 def mask_erode(self, mask, kernel_size=3):
+    # Force odd kernel: even kernels produce asymmetric padding
+    # (`pad = k//2` then output shape = H + 1, crashing downstream nodes
+    # that assume matching dimensions).
+    if kernel_size % 2 == 0:
+        kernel_size += 1
     m = _ensure_3d_mask(mask).unsqueeze(1)
     pad = kernel_size // 2
     out = -F.max_pool2d(-m, kernel_size=kernel_size, stride=1, padding=pad)
@@ -71,6 +76,8 @@ def mask_erode(self, mask, kernel_size=3):
     description="Max pooling dilates the mask (grows white regions).",
 )
 def mask_dilate(self, mask, kernel_size=3):
+    if kernel_size % 2 == 0:
+        kernel_size += 1
     m = _ensure_3d_mask(mask).unsqueeze(1)
     pad = kernel_size // 2
     out = F.max_pool2d(m, kernel_size=kernel_size, stride=1, padding=pad)
@@ -152,3 +159,43 @@ def mask_inspect(self, mask):
         "bbox": [x0, y0, x1, y1],
         "centroid": [round(cx, 2), round(cy, 2)],
     },)
+
+
+@op(
+    op_id="mask_from_depth",
+    display_name="Mask from Depth/Luma",
+    category="Mask",
+    input_schema={"required": {
+        "image": ("IMAGE", {}),
+        "min_value": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0}),
+        "max_value": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0}),
+        "invert": ("BOOLEAN", {"default": False}),
+    }},
+    output_indices=(0,),
+    description=(
+        "Build a mask from a depth/normal/grayscale map by thresholding pixel "
+        "values into the range [min_value, max_value]. Pairs with depth "
+        "estimators (MiDaS, ZoeDepth) for foreground/background isolation. "
+        "Luma is computed from the RGB channels."
+    ),
+)
+def mask_from_depth(self, image, min_value=0.0, max_value=0.5, invert=False):
+    if min_value > max_value:
+        min_value, max_value = max_value, min_value
+    luma = (0.299 * image[..., 0] + 0.587 * image[..., 1] + 0.114 * image[..., 2])
+    mask = ((luma >= min_value) & (luma <= max_value)).float()
+    if invert:
+        mask = 1.0 - mask
+    return (mask,)
+
+
+@op(
+    op_id="mask_invert",
+    display_name="Mask Invert",
+    category="Mask",
+    input_schema={"required": {"mask": ("MASK", {})}},
+    output_indices=(0,),
+    description="Flip mask: 1.0 - mask.",
+)
+def mask_invert(self, mask):
+    return ((1.0 - mask).clamp(0.0, 1.0),)

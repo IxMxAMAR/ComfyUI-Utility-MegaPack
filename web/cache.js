@@ -17,6 +17,12 @@ const HAS_OFFSCREEN = typeof OffscreenCanvas !== "undefined";
 /**
  * Get-or-render a cached pattern for this node.
  *
+ * Cache is keyed by (node, themeId) — only ONE canvas per (node, themeId)
+ * exists at a time. On size change we resize the existing canvas in place and
+ * re-render rather than allocating a fresh one, which used to thrash the GC
+ * (and re-run e_ink's per-pixel loop) on every mouse-move during a node
+ * resize.
+ *
  * @param {Object} node       The LiteGraph node.
  * @param {String} themeId    Used as the cache key namespace.
  * @param {Number} width      Pattern width (typically node.size[0]).
@@ -28,24 +34,32 @@ const HAS_OFFSCREEN = typeof OffscreenCanvas !== "undefined";
  */
 export function cachedPattern(node, themeId, width, height, render) {
   if (width <= 0 || height <= 0) return null;
-  const key = `${themeId}:${width}x${height}`;
-  if (!node._mp_pattern_cache) node._mp_pattern_cache = {};
-  let entry = node._mp_pattern_cache[key];
-  if (entry) return entry;
-
   const w = Math.ceil(width);
   const h = Math.ceil(height);
-  const canvas = HAS_OFFSCREEN ? new OffscreenCanvas(w, h) : Object.assign(document.createElement("canvas"), { width: w, height: h });
+  if (!node._mp_pattern_cache) node._mp_pattern_cache = {};
+  let entry = node._mp_pattern_cache[themeId];
+
+  if (entry && entry.w === w && entry.h === h) {
+    return entry.canvas;
+  }
+
+  let canvas;
+  if (entry) {
+    // Reuse the existing canvas — resizing is faster than allocating.
+    canvas = entry.canvas;
+    canvas.width = w;
+    canvas.height = h;
+  } else {
+    canvas = HAS_OFFSCREEN
+      ? new OffscreenCanvas(w, h)
+      : Object.assign(document.createElement("canvas"), { width: w, height: h });
+  }
+
   const ctx = canvas.getContext("2d");
+  // Setting width/height clears the canvas implicitly; just render.
   render(ctx, w, h);
 
-  // Cap cache size per node to avoid unbounded growth when nodes resize a lot.
-  const entries = Object.keys(node._mp_pattern_cache);
-  if (entries.length > 4) {
-    // Drop the oldest (first inserted) entry. Map insertion order is fine.
-    delete node._mp_pattern_cache[entries[0]];
-  }
-  node._mp_pattern_cache[key] = canvas;
+  node._mp_pattern_cache[themeId] = { canvas, w, h };
   return canvas;
 }
 

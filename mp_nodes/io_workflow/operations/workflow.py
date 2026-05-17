@@ -16,6 +16,8 @@ import requests
 from mp_shared.conversions import tensor_to_pil
 
 from .. import op
+from mp_nodes.io_workflow.operations.filesystem import _require_confined
+from mp_nodes.io_workflow.operations.network import _check_ssrf
 
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
@@ -71,14 +73,22 @@ def filename_format(self, template, seed=0, prompt="", extension="png"):
 def save_image_with_manifest(self, image, output_dir, filename, manifest_json="{}"):
     if not output_dir:
         raise ValueError("output_dir is required")
+    # Reject path traversal via filename — only the basename is kept.
+    safe_filename = os.path.basename(filename)
+    if safe_filename in ("", ".", ".."):
+        raise ValueError(f"invalid filename: {filename!r}")
+    path = os.path.join(output_dir, safe_filename)
+    # Confine BOTH directory and final path to ComfyUI's allow-list.
+    _require_confined(output_dir)
+    _require_confined(path)
     os.makedirs(output_dir, exist_ok=True)
-    path = os.path.join(output_dir, filename)
     pil = tensor_to_pil(image)
     pil.save(path)
     sidecar = os.path.splitext(path)[0] + ".json"
+    _require_confined(sidecar)
     parsed = _json.loads(manifest_json) if manifest_json else {}
     with open(sidecar, "w", encoding="utf-8") as f:
-        _json.dump({**parsed, "image": filename, "saved_at": _dt.datetime.now().isoformat()}, f, indent=2)
+        _json.dump({**parsed, "image": safe_filename, "saved_at": _dt.datetime.now().isoformat()}, f, indent=2)
     return (path,)
 
 
@@ -97,6 +107,7 @@ def save_image_with_manifest(self, image, output_dir, filename, manifest_json="{
 def notify_webhook(self, url, message, timeout_seconds=10):
     if not url:
         raise ValueError("url is required")
+    _check_ssrf(url)
     resp = requests.post(url, json={"message": message}, timeout=int(timeout_seconds))
     return (int(resp.status_code),)
 
@@ -202,3 +213,66 @@ def watch_folder_next(self, folder, wait_seconds=0.0, extensions=".png,.jpg,.jpe
         if time.monotonic() >= deadline:
             return ("",)
         time.sleep(0.25)
+
+
+@op(
+    op_id="save_images_zip",
+    display_name="Save Images to ZIP",
+    category="Workflow",
+    input_schema={"required": {
+        "images": ("IMAGE", {}),
+        "output_path": ("STRING", {"default": "batch.zip"}),
+        "name_prefix": ("STRING", {"default": "img"}),
+        "format": (["png", "jpg", "webp"], {"default": "png"}),
+    }, "optional": {
+        "manifest_json": ("STRING", {"default": "{}", "multiline": True}),
+    }},
+    output_indices=(0,),
+    description=(
+        "Pack a batch of IMAGEs into a single ZIP file. Frames are named "
+        "`{name_prefix}_0001.{ext}`. Optional `manifest_json` is added as "
+        "`manifest.json` inside the ZIP. Use for sweeps and grid generation "
+        "where you want one downloadable artifact instead of N loose files."
+    ),
+)
+def save_images_zip(self, images, output_path, name_prefix="img", format="png", manifest_json="{}"):
+    import zipfile
+    if not output_path:
+        raise ValueError("output_path is required")
+    # Anchor relative paths to ComfyUI's output dir, then confine.
+    if not os.path.isabs(output_path):
+        try:
+            import folder_paths  # type: ignore
+            output_path = os.path.join(folder_paths.get_output_directory(), output_path)
+        except Exception:
+            output_path = os.path.abspath(output_path)
+    _require_confined(output_path)
+    os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+
+    if images.dim() != 4:
+        raise ValueError(f"expected (B, H, W, C) images, got {tuple(images.shape)}")
+    batch = images.shape[0]
+    ext = format.lower()
+    pil_format = {"png": "PNG", "jpg": "JPEG", "webp": "WEBP"}[ext]
+
+    with zipfile.ZipFile(output_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for i in range(batch):
+            frame = images[i:i + 1]
+            pil = tensor_to_pil(frame)
+            buf = io.BytesIO()
+            save_kwargs = {"quality": 92} if pil_format != "PNG" else {}
+            pil.save(buf, format=pil_format, **save_kwargs)
+            zf.writestr(f"{name_prefix}_{i:04d}.{ext}", buf.getvalue())
+        try:
+            parsed = _json.loads(manifest_json) if manifest_json else {}
+        except _json.JSONDecodeError:
+            parsed = {"raw": manifest_json}
+        manifest = {
+            "count": batch,
+            "prefix": name_prefix,
+            "format": ext,
+            "saved_at": _dt.datetime.now().isoformat(),
+            **parsed,
+        }
+        zf.writestr("manifest.json", _json.dumps(manifest, indent=2))
+    return (output_path,)

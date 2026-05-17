@@ -31,11 +31,18 @@ export default {
     const h = node.size?.[1] ?? 0;
     if (w <= 0 || h <= 0) return;
     ctx.save();
-    const grad = ctx.createLinearGradient(0, 0, 0, h);
-    grad.addColorStop(0, "rgba(255,255,255,0.12)");
-    grad.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, w, Math.min(28, h));
+    // The glass highlight gradient depends only on the strip height (capped
+    // at 28), not the node width. Cache by that height.
+    const stripH = Math.min(28, h);
+    let cached = node._mp_glass_grad;
+    if (!cached || cached.h !== stripH) {
+      const grad = ctx.createLinearGradient(0, 0, 0, stripH);
+      grad.addColorStop(0, "rgba(255,255,255,0.12)");
+      grad.addColorStop(1, "rgba(255,255,255,0)");
+      cached = node._mp_glass_grad = { h: stripH, grad };
+    }
+    ctx.fillStyle = cached.grad;
+    ctx.fillRect(0, 0, w, stripH);
     ctx.restore();
   },
   themeApiVersion: 1,

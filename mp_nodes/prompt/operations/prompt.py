@@ -5,12 +5,16 @@ import os
 import random
 import re
 
-from jinja2 import Environment, StrictUndefined
+from jinja2 import StrictUndefined
+from jinja2.sandbox import SandboxedEnvironment
 
 from .. import op
 
 
-_jinja = Environment(autoescape=False, undefined=StrictUndefined, keep_trailing_newline=False)
+# SandboxedEnvironment blocks the attribute-walk pivot
+# (`__class__.__bases__...`) so a shared workflow can't escalate template
+# rendering into Python execution.
+_jinja = SandboxedEnvironment(autoescape=False, undefined=StrictUndefined, keep_trailing_newline=False)
 
 
 _NEGATIVE_PRESETS = {
@@ -211,3 +215,92 @@ def token_count(self, text):
 )
 def prompt_join_list(self, prompts, separator=", "):
     return (separator.join(str(p) for p in (prompts or [])),)
+
+
+@op(
+    op_id="llm_enhance_prompt",
+    display_name="LLM Enhance Prompt (Ollama-compatible)",
+    category="Prompt",
+    input_schema={"required": {
+        "prompt": ("STRING", {"default": "", "multiline": True}),
+        "model": ("STRING", {"default": "llama3.2"}),
+        "base_url": ("STRING", {"default": "http://127.0.0.1:11434"}),
+        "style": (["detailed", "cinematic", "photoreal", "concept_art", "minimal"], {"default": "detailed"}),
+        "timeout_seconds": ("INT", {"default": 60, "min": 5, "max": 600}),
+    }, "optional": {
+        "system_prompt": ("STRING", {"default": "", "multiline": True}),
+    }},
+    output_indices=(0,),
+    description=(
+        "Expand a basic prompt into a detailed SD/SDXL prompt via an "
+        "Ollama-compatible local LLM endpoint (default: http://127.0.0.1:11434). "
+        "Set UTILITY_MEGAPACK_ALLOW_INTERNAL_HTTP=1 to allow loopback. "
+        "Other compatible servers (LM Studio, llama.cpp server) also work via "
+        "their OpenAI-style /v1/chat/completions endpoint."
+    ),
+)
+def llm_enhance_prompt(self, prompt, model="llama3.2", base_url="http://127.0.0.1:11434",
+                      style="detailed", timeout_seconds=60, system_prompt=""):
+    import requests
+    # Lazy-imported to avoid a circular import at module load.
+    from mp_nodes.io_workflow.operations.network import _check_ssrf
+
+    if not prompt.strip():
+        return ("",)
+
+    style_directives = {
+        "detailed": "Expand into a richly detailed Stable Diffusion prompt. Add lighting, materials, mood, lens, composition. Keep it under 80 tokens.",
+        "cinematic": "Rewrite as a cinematic still description: anamorphic lens, dramatic key light, color palette, camera angle. Under 80 tokens.",
+        "photoreal": "Rewrite as a photoreal scene: real camera (sensor, lens, ISO), realistic lighting, no painterly terms. Under 80 tokens.",
+        "concept_art": "Rewrite as concept art description: medium (oil, ink), brushwork, palette, lighting. Under 80 tokens.",
+        "minimal": "Tighten and clarify — no fluff, no adjectives that don't earn their place. Under 30 tokens.",
+    }
+    system = system_prompt.strip() or (
+        "You enhance user prompts for image generators. "
+        "Return ONLY the rewritten prompt — no preamble, no quotes, no markdown."
+    )
+    user_msg = f"{style_directives.get(style, style_directives['detailed'])}\n\nOriginal: {prompt.strip()}"
+
+    base = base_url.rstrip("/")
+    _check_ssrf(base)
+    # Try Ollama native API first, fall back to OpenAI-compatible.
+    try:
+        resp = requests.post(
+            f"{base}/api/chat",
+            json={
+                "model": model,
+                "messages": [
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user_msg},
+                ],
+                "stream": False,
+            },
+            timeout=int(timeout_seconds),
+        )
+        if resp.status_code == 404:
+            raise FileNotFoundError("ollama /api/chat 404")
+        resp.raise_for_status()
+        body = resp.json()
+        text = body.get("message", {}).get("content", "")
+        if text:
+            return (text.strip(),)
+    except (requests.RequestException, FileNotFoundError, ValueError):
+        pass
+
+    resp = requests.post(
+        f"{base}/v1/chat/completions",
+        json={
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": user_msg},
+            ],
+            "stream": False,
+        },
+        timeout=int(timeout_seconds),
+    )
+    resp.raise_for_status()
+    body = resp.json()
+    choice = (body.get("choices") or [{}])[0]
+    text = choice.get("message", {}).get("content", "") or choice.get("text", "")
+    return (text.strip(),)

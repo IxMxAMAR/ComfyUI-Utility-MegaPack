@@ -36,15 +36,18 @@ export default {
     const h = node.size?.[1] ?? 0;
     if (w <= 0 || h <= 0) return;
     ctx.save();
-    // Pink-to-purple horizontal gradient stripe at the very top, 3px tall.
-    // Mimics a synthwave sunset bar without the cost of a full header repaint.
-    const grad = ctx.createLinearGradient(0, 0, w, 0);
-    grad.addColorStop(0, HEADER_STOPS[0]);
-    grad.addColorStop(1, HEADER_STOPS[1]);
-    ctx.fillStyle = grad;
+    // Cache the pink→purple gradient per (node, width). Reallocating a
+    // CanvasGradient every frame was measurable churn at 200Hz × many nodes.
+    let cached = node._mp_synthwave_grad;
+    if (!cached || cached.w !== w) {
+      const grad = ctx.createLinearGradient(0, 0, w, 0);
+      grad.addColorStop(0, HEADER_STOPS[0]);
+      grad.addColorStop(1, HEADER_STOPS[1]);
+      cached = node._mp_synthwave_grad = { w, grad };
+    }
+    ctx.fillStyle = cached.grad;
     ctx.fillRect(0, -3, w, 3);
     if (themeApi && themeApi.motionAllowed("low")) {
-      // Subtle cyan neon outline (no shadowBlur — uses two-pass strokes).
       ctx.strokeStyle = "#00f0ff";
       ctx.globalAlpha = 0.25;
       ctx.lineWidth = 3;

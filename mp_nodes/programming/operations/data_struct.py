@@ -154,3 +154,73 @@ def list_sort(self, data, reverse=False):
 )
 def list_reverse(self, data):
     return (list(reversed(data)),)
+
+
+# ---------------- JSON Path / dotted-path lookups ----------------
+
+def _walk_path(obj, path: str):
+    """Walk a dotted/bracketed path through nested dicts and lists.
+
+    Supports:
+      `a.b.c`               nested key lookup
+      `items[0]`            list index
+      `items[-1]`           negative index from the end
+      `a.b[2].c`            mixed
+      `*`                   leaves the path early (returns current obj)
+
+    Returns the value at the path or raises KeyError / IndexError.
+    """
+    if not path or path == "*":
+        return obj
+    cur = obj
+    # Split on `.` but keep bracket segments attached: `a.b[2].c` → ['a','b[2]','c']
+    parts = [p for p in path.split(".") if p]
+    for part in parts:
+        # Pull out bracketed indices/keys: `foo[2][bar]` → name="foo", idx=[2,"bar"]
+        name = part
+        bracket_indices: list = []
+        while "[" in name and name.endswith("]"):
+            head, _, rest = name.rpartition("[")
+            idx = rest[:-1]
+            bracket_indices.insert(0, idx)
+            name = head
+        if name:
+            if not isinstance(cur, dict):
+                raise KeyError(f"path {path!r}: cannot key {name!r} into {type(cur).__name__}")
+            cur = cur[name]
+        for idx in bracket_indices:
+            if isinstance(cur, list):
+                cur = cur[int(idx)]
+            elif isinstance(cur, dict):
+                # Allow quoted-key style: a["foo"]
+                key = idx.strip("'").strip('"')
+                cur = cur[key]
+            else:
+                raise KeyError(f"path {path!r}: cannot index into {type(cur).__name__}")
+    return cur
+
+
+@op(
+    op_id="json_path",
+    display_name="JSON Path Extract",
+    category="Data Structures",
+    input_schema={"required": {
+        "data": ("DICT", {"default": {}}),
+        "path": ("STRING", {"default": ""}),
+    }, "optional": {
+        "default_on_miss": ("STRING", {"default": ""}),
+    }},
+    output_indices=(0, 5, 6),
+    description=(
+        "Extract a nested value via dotted path: `user.name`, `items[0].price`, "
+        "`results[-1].url`. Outputs: (text-coerced str, raw dict if dict, raw any)."
+    ),
+)
+def json_path(self, data, path, default_on_miss=""):
+    try:
+        value = _walk_path(data, path)
+    except (KeyError, IndexError, ValueError, TypeError):
+        value = default_on_miss
+    text = "" if value is None else (value if isinstance(value, str) else str(value))
+    dict_out = value if isinstance(value, dict) else {}
+    return (text, dict_out, value)

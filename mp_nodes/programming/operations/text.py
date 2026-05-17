@@ -4,12 +4,16 @@ import json
 import re
 
 import yaml
-from jinja2 import Environment, StrictUndefined
+from jinja2 import StrictUndefined
+from jinja2.sandbox import SandboxedEnvironment
 
 from .. import op
 
 
-_jinja_env = Environment(
+# SandboxedEnvironment blocks attribute-walks like
+# `{{ obj.__class__.__bases__[0].__subclasses__() }}` that would otherwise let a
+# shared workflow pivot from string templating into arbitrary Python exec/RCE.
+_jinja_env = SandboxedEnvironment(
     autoescape=False,
     undefined=StrictUndefined,
     keep_trailing_newline=False,

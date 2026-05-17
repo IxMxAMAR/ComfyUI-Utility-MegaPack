@@ -1,8 +1,8 @@
 # ComfyUI-Utility-MegaPack
 
-Comprehensive utility node pack for ComfyUI — **156 operations across 7 functional nodes** plus a smoke-test node, with **11 swappable visual themes** that can be applied per-node, pack-wide, or globally across every ComfyUI node.
+Comprehensive utility node pack for ComfyUI — **175+ operations across 7 functional nodes** plus a smoke-test node, with **15 swappable visual themes** that can be applied per-node, pack-wide, or globally across every ComfyUI node.
 
-**Status:** Alpha. Core feature-complete.
+**Status:** v0.3.0 — security-hardened, audit-fixed, perf-tuned. See [CHANGELOG.md](CHANGELOG.md) for the full v0.3 audit results.
 
 ## Install
 
@@ -26,13 +26,13 @@ All nodes appear under the `Utility-MegaPack/` menu in ComfyUI. Each node has a 
 
 | Node | Ops | What it does |
 |---|---:|---|
-| **Programming** | 60 | Control flow (for/while/if), data structures (dict/list/set), text/parsing (regex/Jinja/YAML), math + stats, logic + bitwise, crypto (SHA/HMAC/AES-GCM), encoding (base64/url/slug). Sandboxed expression evaluator. |
-| **Prompt** | 9 | Batcher, file loader (.txt/.csv), wildcard expander (`__color__`), weighted mixer, Jinja template render, cleaner (dedupe + comma normalize), negative auto-build, token counter. |
-| **Image Pro** | 27 | Loaders (path/glob/random/last-saved/sequence). Value/color (invert, HSL shift, levels, posterize, solarize, threshold). Spatial (pixelate, blur, sharpen, chromatic aberration, vignette, lens distortion, tile). Style (noise, film grain, JPEG quality degrade, glitch, halftone). Inspect (image_info, channel ops, palette extract, histogram). |
-| **Mask & Latent** | 10 | Mask from color (with tolerance). Erode / dilate / blur. Combine (union/intersect/diff/xor). Inspect (coverage, bbox, centroid). Latent inspect / math / noise inject / smart upscale. |
-| **IO & Workflow** | 21 | Filesystem (mkdir/exists/glob/copy/move/delete). Path ops (join/basename/dirname/sanitize). HTTP GET / POST. Save image with manifest sidecar. Filename builder (`{date}_{seed}_{prompt_slug}.png`). Notify (webhook + console). Workflow stop / assert. Sweep parameter range. Watch folder. System stats (RAM/disk/GPU). |
+| **Programming** | 61 | Control flow (for/while/if), data structures (dict/list/set, **JSON Path extract**), text/parsing (regex/sandboxed-Jinja/YAML), math + stats, logic + bitwise, crypto (SHA/HMAC/AES-GCM), encoding (base64/url/slug). Sandboxed expression evaluator. |
+| **Prompt** | 10 | Batcher, file loader (.txt/.csv), wildcard expander (`__color__`), weighted mixer, sandboxed-Jinja template render, cleaner (dedupe + comma normalize), negative auto-build, token counter. **NEW v0.3:** `llm_enhance_prompt` (Ollama / LM Studio / llama.cpp). |
+| **Image Pro** | 30 | Loaders (path/glob/random/last-saved/sequence). Value/color (invert, HSL shift, levels, posterize, solarize, threshold, **color match histogram**, **alpha-aware composite over**). Spatial (pixelate, blur, sharpen, chromatic aberration, vignette, lens distortion, tile, **pad to multiple**). Style (noise, film grain, JPEG quality degrade, glitch, halftone, **frequency separation**). Inspect (image_info, channel ops, palette extract, histogram). |
+| **Mask & Latent** | 14 | Mask from color, **mask from depth/luma**, **mask invert**. Erode / dilate (now even-kernel safe) / blur. Combine (union/intersect/diff/xor). Inspect (coverage, bbox, centroid). Latent inspect / math / noise inject / smart upscale (auxiliary keys like `noise_mask` now preserved). **NEW v0.3:** `latent_nan_guard`, `latent_pad_crop`. |
+| **IO & Workflow** | 23 | Filesystem (mkdir/exists/glob/copy/move/delete) — now strictly confined to ComfyUI's input/output/temp. Path ops. HTTP GET / POST — now SSRF-blocked by default. Save image with manifest sidecar (now confined). Filename builder. Notify (webhook + console). Workflow stop / assert. Sweep parameter range. Watch folder. System stats (RAM/disk/GPU). **NEW v0.3:** `save_images_zip`. |
 | **Convenience** | 14 | Universal reroute, multi-output split (1→5), switch, gate, counter, timer, debug print, pin selector, preset save/load, side-by-side compare, workflow note, value select. |
-| **Models & Sampling** | 14 | Read .safetensors metadata (no model load). Model fingerprint hash. List installed models in folder. LoRA trigger-word extractor. Aspect ratio picker (8 presets). SDXL bucket picker (9 official sizes). Snap to multiple. Megapixel calculator. Seed cycle (fixed/incr/decr/random/from-string). Multi-seed batch. Seed history. Sampler / scheduler pickers. Sampler params bundle. |
+| **Models & Sampling** | 14 | Read .safetensors metadata (no model load). Model fingerprint hash. List installed models in folder. LoRA trigger-word extractor. Aspect ratio picker (8 presets, now /8-snapped). SDXL bucket picker (9 official sizes). Snap to multiple. Megapixel calculator. Seed cycle. Multi-seed batch. Seed history. Sampler / scheduler pickers. Sampler params bundle. |
 
 ## Themes
 

@@ -30,11 +30,12 @@ def test_prompt_node_has_four_outputs(pkg):
     assert NodeCls.RETURN_NAMES == ("prompt", "negative", "all_prompts", "token_count")
 
 
-def test_prompt_node_lists_nine_ops(pkg):
+def test_prompt_node_lists_ops(pkg):
     NodeCls = pkg.NODE_CLASS_MAPPINGS["UtilMegaPack_Prompt"]
     schema = NodeCls.INPUT_TYPES()
     options, _ = schema["required"]["mode"]
-    assert len(options) == 9
+    # Lower bound — new ops are additive, exact equality was a brittle assertion.
+    assert len(options) >= 9, f"expected >=9 ops, got {len(options)}"
 
 
 def test_prompt_node_smoke_one_per_op_type(pkg):

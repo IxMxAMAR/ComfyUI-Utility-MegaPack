@@ -1,13 +1,13 @@
 import { app } from "../../scripts/app.js";
 
 import { ThemeRegistry } from "./theme-registry.js";
-import { ThemeEngine, applyGlobalTweaks } from "./theme-engine.js";
+import { ThemeEngine, applyGlobalTweaks, applyThemeToGroup } from "./theme-engine.js";
 import { createThemeApi } from "./theme-api.js";
 import { resolveTheme } from "./resolve-theme.js";
 import {
   applyWirePalette,
   applyWireRenderMode,
-  setWireThickness,
+  applyWireThickness,
   setWireOpacity,
   ensureRenderLinkWrapped,
 } from "./wire-engine.js";
@@ -51,6 +51,9 @@ const settings = {
   wireRenderMode: 0,     // 0 = leave ComfyUI's setting alone; 1/2/3/4 = override
   wireThickness: 1.0,    // multiplier on default line width
   wireOpacity: 1.0,      // 0..1
+  // v0.3.0
+  autoContrastText: true,
+  rightClickThemeMenu: true,
 };
 
 const themedNodes = new Set();
@@ -82,7 +85,7 @@ function applyResolved(node) {
   const themeId = resolveTheme(node, settings);
   const theme = themeId ? registry.get(themeId) : null;
   if (theme) theme.themeApi = themeApi;
-  engine.applyTheme(node, theme);
+  engine.applyTheme(node, theme, { autoContrast: settings.autoContrastText });
   if (theme) themedNodes.add(node);
   else themedNodes.delete(node);
 }
@@ -125,6 +128,17 @@ app.registerExtension({
       ensureRenderLinkWrapped(window.LGraphCanvas);
     }
 
+    // Auto-theme any groups created AFTER a global theme is active. v0.2.x
+    // only applied group colors on theme switch, so new groups showed
+    // LiteGraph defaults until the user re-picked the theme.
+    if (app.graph) {
+      const origOnGroupAdded = app.graph.onGroupAdded;
+      app.graph.onGroupAdded = function (group) {
+        applyThemeToGroup(group);
+        if (origOnGroupAdded) origOnGroupAdded.call(this, group);
+      };
+    }
+
     defineSetting("packDefault", "Utility-MegaPack — Pack default theme", "combo",
       "default",
       (v) => { settings.packDefault = v; reapplyAll(); },
@@ -144,7 +158,7 @@ app.registerExtension({
       (v) => { settings.reduceMotion = v; reapplyAll(); });
     defineSetting("heavyThemeNodeBudget", "Utility-MegaPack — Heavy theme node budget", "number",
       25,
-      (v) => { settings.heavyThemeNodeBudget = v; });
+      (v) => { settings.heavyThemeNodeBudget = v; app.canvas?.setDirty?.(true, true); });
 
     // v0.2.0: wire/connection theming
     defineSetting("wireRenderMode", "Utility-MegaPack — Wire render mode", "combo",
@@ -158,10 +172,17 @@ app.registerExtension({
       WIRE_RENDER_MODE_OPTIONS);
     defineSetting("wireThickness", "Utility-MegaPack — Wire thickness (×)", "number",
       1.0,
-      (v) => { settings.wireThickness = Number(v) || 1.0; setWireThickness(settings.wireThickness); app.canvas?.setDirty?.(true, false); });
+      (v) => { settings.wireThickness = Number(v) || 1.0; applyWireThickness(app, settings.wireThickness); });
     defineSetting("wireOpacity", "Utility-MegaPack — Wire opacity", "slider",
       1.0,
       (v) => { settings.wireOpacity = Number(v) || 1.0; setWireOpacity(settings.wireOpacity); app.canvas?.setDirty?.(true, false); });
+    // v0.3.0: UX
+    defineSetting("autoContrastText", "Utility-MegaPack — Auto-contrast title text", "boolean",
+      true,
+      (v) => { settings.autoContrastText = !!v; reapplyAll(); });
+    defineSetting("rightClickThemeMenu", "Utility-MegaPack — Right-click 'Theme…' menu on nodes", "boolean",
+      true,
+      (v) => { settings.rightClickThemeMenu = !!v; });
   },
 
   async nodeCreated(node) {
@@ -177,11 +198,45 @@ app.registerExtension({
         return orig?.(v, ...rest);
       };
     }
+    // Right-click → "Theme…" submenu. Lets users theme ANY node without
+    // a widget (vanilla ComfyUI nodes don't have a theme widget at all).
+    const origMenu = node.getExtraMenuOptions;
+    node.getExtraMenuOptions = function (canvas, options) {
+      if (origMenu) origMenu.call(this, canvas, options);
+      if (!settings.rightClickThemeMenu) return;
+      const submenu = THEME_OPTIONS.map((id) => ({
+        content: id === "default" ? "(default — no theme)" : id,
+        callback: () => {
+          this.properties = this.properties ?? {};
+          this.properties.megapack_theme = id;
+          applyResolved(this);
+          syncGlobalTweaks();
+          this.setDirtyCanvas?.(true, true);
+        },
+      }));
+      const active = this.properties?.megapack_theme;
+      for (const item of submenu) {
+        if (item.content.startsWith(active || "")) item.content = "• " + item.content;
+      }
+      options.push(null);  // visual separator
+      options.push({
+        content: "Theme…",
+        has_submenu: true,
+        submenu: { options: submenu },
+      });
+    };
   },
 
   async loadedGraphNode(node) {
     applyResolved(node);
     // After the full graph loads, sync global tweaks once (group colors etc.)
     syncGlobalTweaks();
+  },
+
+  // Without this, deleted nodes lingered in `themedNodes` forever — leaking
+  // references AND permanently inflating the heavyThemeNodeBudget check, which
+  // would eventually disable all motion across the session.
+  nodeRemoved(node) {
+    themedNodes.delete(node);
   },
 });

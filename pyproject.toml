@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "comfyui-utility-megapack"
-version = "0.2.0"
-description = "Comprehensive ComfyUI utility node pack with 156 operations across 7 nodes and 11 swappable visual themes."
+version = "0.3.0"
+description = "Comprehensive ComfyUI utility node pack with 175+ operations across 8 nodes and 15 swappable visual themes."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}

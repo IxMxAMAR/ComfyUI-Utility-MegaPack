@@ -154,3 +154,38 @@ def lens_distortion(self, image, k=0.2):
 def tile_repeat(self, image, cols=2, rows=2):
     import torch
     return (image.repeat(1, rows, cols, 1),)
+
+
+@op(
+    op_id="pad_to_multiple",
+    display_name="Pad to Multiple",
+    category="Spatial",
+    input_schema={"required": {
+        "image": ("IMAGE", {}),
+        "multiple": ("INT", {"default": 64, "min": 1, "max": 1024}),
+        "fill_value": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 1.0}),
+    }},
+    output_indices=(0, 2, 3),
+    description=(
+        "Pad image's H and W up to the next multiple of `multiple`. SDXL likes "
+        "/64; many ControlNet preprocessors require /8. Padding is added on the "
+        "bottom and right with `fill_value` (0=black, 1=white). Outputs new "
+        "(image, width, height) so downstream nodes get the post-pad dims."
+    ),
+)
+def pad_to_multiple(self, image, multiple=64, fill_value=0.0):
+    import torch
+    if image.dim() != 4:
+        raise ValueError(f"expected (B, H, W, C) image, got shape {tuple(image.shape)}")
+    B, H, W, C = image.shape
+    new_h = ((H + multiple - 1) // multiple) * multiple
+    new_w = ((W + multiple - 1) // multiple) * multiple
+    if new_h == H and new_w == W:
+        return (image, int(W), int(H))
+    out = torch.full((B, new_h, new_w, C), float(fill_value), dtype=image.dtype, device=image.device)
+    # Preserve alpha for RGBA: padded region is fully opaque (1.0), not the
+    # color fill_value.
+    if C >= 4:
+        out[..., 3] = 1.0
+    out[:, :H, :W, :] = image
+    return (out, int(new_w), int(new_h))
