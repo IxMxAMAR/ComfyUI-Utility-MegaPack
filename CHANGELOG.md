@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] — 2026-05-17
+
+Two user-reported bugs from v0.3.0:
+
+- **Category accent stripe bled past collapsed nodes.** When a node was
+  collapsed, LiteGraph kept `node.size[1]` at the un-collapsed value and did
+  NOT clip per-node `onDrawForeground` to the collapsed title pill, so the
+  left-edge accent stripe (and any theme `drawForeground`/`drawBackground`)
+  painted a vertical bar into empty canvas below the pill. Now we skip all
+  MegaPack theme decoration when `node.flags.collapsed` is true.
+- **Wire render mode dropdown was off-by-one and contained a fictional
+  option.** LiteGraph's actual constants are `HIDDEN=-1, STRAIGHT=0,
+  LINEAR=1, SPLINE=2`. v0.3.0 mapped dropdown index → setting value 1:1,
+  so picking "straight" actually set LINEAR, picking "linear" set SPLINE,
+  and "bezier (spline)" / "manhattan (L-shape)" sent invalid values 3/4
+  that LiteGraph ignored (silently falling back to default spline). The
+  perceived behavior was "only Straight works" — because LINEAR lines look
+  passably straight. The dropdown now has explicit label→value pairs,
+  drops the non-existent Manhattan option, and adds Hidden. Options:
+  off / hidden / straight / linear / spline (bezier).
+
 ## [0.3.0] — 2026-05-17
 
 Big audit + fix release driven by two full-codebase Gemini Pro reviews

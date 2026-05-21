@@ -67,10 +67,19 @@ export class ThemeEngine {
 
     // Install draw wrappers exactly once per node, regardless of theme. Other
     // extensions can wrap us before or after and we both compose cleanly.
+    //
+    // Collapsed-node note: LiteGraph keeps `node.size` at the expanded values
+    // even when `flags.collapsed` is true (the node renders as a small title
+    // pill but the size array doesn't shrink). LiteGraph also does NOT clip
+    // per-node `onDrawForeground` to the collapsed pill, so a naive accent
+    // stripe at `node.size[1]` height bleeds past the bottom of the pill.
+    // Skip our theme decoration entirely when collapsed; the title pill is
+    // tiny and decorations there look broken anyway.
     if (!node[MP_FG_TAG]) {
       const origFg = node.onDrawForeground;
       node.onDrawForeground = function (ctx) {
         if (origFg) origFg.call(this, ctx);
+        if (this.flags?.collapsed) return;
         const accent = this._mp_accent;
         if (accent) {
           const h = this.size?.[1] ?? 0;
@@ -93,6 +102,7 @@ export class ThemeEngine {
       const origBg = node.onDrawBackground;
       node.onDrawBackground = function (ctx) {
         if (origBg) origBg.call(this, ctx);
+        if (this.flags?.collapsed) return;
         const t = this._mp_theme;
         if (t?.drawBackground) {
           t.drawBackground.call(this, ctx, this, t.themeApi);

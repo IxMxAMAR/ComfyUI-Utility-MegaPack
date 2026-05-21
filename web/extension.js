@@ -48,7 +48,7 @@ const settings = {
   reduceMotion: false,
   heavyThemeNodeBudget: 25,
   // v0.2.0
-  wireRenderMode: 0,     // 0 = leave ComfyUI's setting alone; 1/2/3/4 = override
+  wireRenderMode: null,  // null = leave ComfyUI's setting alone; otherwise a LiteGraph constant (-1, 0, 1, or 2)
   wireThickness: 1.0,    // multiplier on default line width
   wireOpacity: 1.0,      // 0..1
   // v0.3.0
@@ -101,7 +101,23 @@ function reapplyAll() {
 
 
 const THEME_OPTIONS = registry.ids();
-const WIRE_RENDER_MODE_OPTIONS = ["off (leave ComfyUI's setting)", "straight", "linear", "bezier (spline)", "manhattan (L-shape)"];
+
+// Wire render modes — explicit label→value pairs because LiteGraph's constants
+// are 0-based AND non-contiguous (HIDDEN=-1, STRAIGHT=0, LINEAR=1, SPLINE=2).
+// v0.3.0 used `indexOf` on a label-only array which was off-by-one and also
+// included a fictional "manhattan" option. The result: 3 of 4 options either
+// did the wrong thing or did nothing. The selected "straight" looked plausible
+// because it actually set LINEAR.
+const WIRE_RENDER_MODES = [
+  { label: "off (leave ComfyUI's setting)", value: null },
+  { label: "hidden",                         value: -1   },
+  { label: "straight",                       value: 0    },
+  { label: "linear",                         value: 1    },
+  { label: "spline (bezier)",                value: 2    },
+];
+const WIRE_RENDER_MODE_OPTIONS = WIRE_RENDER_MODES.map((m) => m.label);
+const wireRenderValueFor = (label) =>
+  WIRE_RENDER_MODES.find((m) => m.label === label)?.value ?? null;
 
 function defineSetting(id, name, type, defaultValue, onChange, options) {
   const setting = {
@@ -164,9 +180,10 @@ app.registerExtension({
     defineSetting("wireRenderMode", "Utility-MegaPack — Wire render mode", "combo",
       WIRE_RENDER_MODE_OPTIONS[0],
       (v) => {
-        settings.wireRenderMode = WIRE_RENDER_MODE_OPTIONS.indexOf(v);  // 0 = off, 1..4 = LiteGraph modes
-        if (settings.wireRenderMode > 0) {
-          applyWireRenderMode(app, settings.wireRenderMode);
+        const val = wireRenderValueFor(v);
+        settings.wireRenderMode = val;
+        if (val !== null) {
+          applyWireRenderMode(app, val);
         }
       },
       WIRE_RENDER_MODE_OPTIONS);

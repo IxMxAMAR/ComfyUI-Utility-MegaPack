@@ -44,9 +44,16 @@ export function applyWirePalette(app, palette) {
 
 
 /**
- * Set the link render mode globally.
- *   1 = Straight, 2 = Linear, 3 = Spline/Bezier, 4 = L-Shape (ComfyUI Manhattan).
- *   null = leave ComfyUI's user setting alone.
+ * Set the link render mode globally. Values match LiteGraph's actual constants
+ * (verified against ComfyUI's bundled litegraph: HIDDEN=-1, STRAIGHT=0,
+ * LINEAR=1, SPLINE=2). v0.2.x docs incorrectly claimed values were 1-indexed
+ * and there was a "Manhattan/L-shape" mode — neither was true.
+ *
+ *   null = leave ComfyUI's own setting alone.
+ *   -1   = hidden
+ *    0   = straight
+ *    1   = linear
+ *    2   = spline (bezier)
  */
 export function applyWireRenderMode(app, mode) {
   if (!app?.canvas) return;
