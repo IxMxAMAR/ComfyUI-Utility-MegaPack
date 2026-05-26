@@ -1,0 +1,562 @@
+{
+  "last_node_id": 6,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UtilMegaPack_Convenience",
+      "pos": [
+        50,
+        50
+      ],
+      "size": [
+        320,
+        512
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_0",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_1",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_2",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_3",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_4",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "image_a",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image_b",
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "out_1",
+          "type": "*",
+          "links": [
+            1,
+            2
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "out_2",
+          "type": "*",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "out_3",
+          "type": "*",
+          "links": [],
+          "slot_index": 2
+        },
+        {
+          "name": "out_4",
+          "type": "*",
+          "links": [],
+          "slot_index": 3
+        },
+        {
+          "name": "out_5",
+          "type": "*",
+          "links": [],
+          "slot_index": 4
+        }
+      ],
+      "properties": {
+        "recipe_id": "counter",
+        "Node name for S&R": "UtilMegaPack_Convenience"
+      },
+      "widgets_values": [
+        "counter_inc",
+        "(use pack default)",
+        0,
+        true,
+        "global_run_count",
+        1,
+        false,
+        "DEBUG",
+        "[\"a\",\"b\",\"c\"]",
+        "default",
+        "{}",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 2,
+      "type": "UtilMegaPack_Convenience",
+      "pos": [
+        430,
+        50
+      ],
+      "size": [
+        320,
+        512
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "*",
+          "link": 1
+        },
+        {
+          "name": "value_0",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_1",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_2",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_3",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_4",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "image_a",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image_b",
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "out_1",
+          "type": "*",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "out_2",
+          "type": "*",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "out_3",
+          "type": "*",
+          "links": [],
+          "slot_index": 2
+        },
+        {
+          "name": "out_4",
+          "type": "*",
+          "links": [],
+          "slot_index": 3
+        },
+        {
+          "name": "out_5",
+          "type": "*",
+          "links": [],
+          "slot_index": 4
+        }
+      ],
+      "properties": {
+        "recipe_id": "gate",
+        "Node name for S&R": "UtilMegaPack_Convenience"
+      },
+      "widgets_values": [
+        "gate_passthrough",
+        "(use pack default)",
+        0,
+        true,
+        "default",
+        1,
+        false,
+        "DEBUG",
+        "[\"a\",\"b\",\"c\"]",
+        "default",
+        "{}",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 3,
+      "type": "UtilMegaPack_Convenience",
+      "pos": [
+        810,
+        50
+      ],
+      "size": [
+        320,
+        512
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_0",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_1",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_2",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_3",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "value_4",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "image_a",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "image_b",
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "out_1",
+          "type": "*",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "out_2",
+          "type": "*",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "out_3",
+          "type": "*",
+          "links": [],
+          "slot_index": 2
+        },
+        {
+          "name": "out_4",
+          "type": "*",
+          "links": [],
+          "slot_index": 3
+        },
+        {
+          "name": "out_5",
+          "type": "*",
+          "links": [],
+          "slot_index": 4
+        }
+      ],
+      "properties": {
+        "recipe_id": "switch",
+        "Node name for S&R": "UtilMegaPack_Convenience"
+      },
+      "widgets_values": [
+        "switch_any",
+        "(use pack default)",
+        0,
+        true,
+        "default",
+        1,
+        false,
+        "DEBUG",
+        "[\"a\",\"b\",\"c\"]",
+        "default",
+        "{}",
+        "",
+        "Branch A output \u2014 counter was even",
+        "Branch B output \u2014 counter was odd",
+        "Branch C output \u2014 fallback",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 4,
+      "type": "ShowText",
+      "pos": [
+        1190,
+        50
+      ],
+      "size": [
+        320,
+        94
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 2,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "recipe_id": "out_counter",
+        "Node name for S&R": "ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 5,
+      "type": "ShowText",
+      "pos": [
+        1190,
+        174
+      ],
+      "size": [
+        320,
+        94
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 3,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "recipe_id": "out_gate",
+        "Node name for S&R": "ShowText"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 6,
+      "type": "ShowText",
+      "pos": [
+        1190,
+        298
+      ],
+      "size": [
+        320,
+        94
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 4,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "recipe_id": "out_switch",
+        "Node name for S&R": "ShowText"
+      },
+      "widgets_values": []
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "*"
+    ],
+    [
+      2,
+      1,
+      0,
+      4,
+      0,
+      "*"
+    ],
+    [
+      3,
+      2,
+      0,
+      5,
+      0,
+      "*"
+    ],
+    [
+      4,
+      3,
+      0,
+      6,
+      0,
+      "*"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "Counter",
+      "bounding": [
+        30,
+        0,
+        360,
+        582
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Gate",
+      "bounding": [
+        410,
+        0,
+        360,
+        582
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Switch",
+      "bounding": [
+        790,
+        0,
+        360,
+        582
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Output",
+      "bounding": [
+        1170,
+        0,
+        360,
+        412
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "description": "Demonstrate MegaPack's stateful primitives: counter_inc tracks run count, gate_passthrough conditionally forwards a value, and switch_any selects between branches.",
+    "title": "MegaPack \u2014 Workflow State Machine",
+    "tier": 2,
+    "pack": "ComfyUI-Utility-MegaPack"
+  },
+  "version": 0.4
+}

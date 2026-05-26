@@ -1,0 +1,443 @@
+{
+  "last_node_id": 4,
+  "last_link_id": 3,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UtilMegaPack_IOWorkflow",
+      "pos": [
+        50,
+        50
+      ],
+      "size": [
+        320,
+        876
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "parsed",
+          "type": "DICT",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [],
+          "slot_index": 2
+        },
+        {
+          "name": "status_code",
+          "type": "INT",
+          "links": [],
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "recipe_id": "http",
+        "Node name for S&R": "UtilMegaPack_IOWorkflow"
+      },
+      "widgets_values": [
+        "http_get",
+        "(use pack default)",
+        "",
+        true,
+        "",
+        false,
+        "",
+        "",
+        false,
+        false,
+        "",
+        "",
+        "",
+        "",
+        "_",
+        "https://httpbin.org/json",
+        15,
+        "{}",
+        "{}",
+        "{date}_{seed}_{prompt_slug}.png",
+        0,
+        "",
+        "png",
+        "",
+        "{}",
+        "",
+        "MegaPack",
+        false,
+        0.0,
+        1.0,
+        0.1,
+        "",
+        0.0,
+        ".png,.jpg,.jpeg,.webp",
+        "batch.zip",
+        "img",
+        "png",
+        "."
+      ]
+    },
+    {
+      "id": 2,
+      "type": "UtilMegaPack_Programming",
+      "pos": [
+        430,
+        50
+      ],
+      "size": [
+        320,
+        978
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 1,
+          "widget": {
+            "name": "text"
+          }
+        },
+        {
+          "name": "values",
+          "type": "LIST",
+          "link": null
+        },
+        {
+          "name": "data",
+          "type": "DICT",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "string",
+          "type": "STRING",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "int",
+          "type": "INT",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "float",
+          "type": "FLOAT",
+          "links": [],
+          "slot_index": 2
+        },
+        {
+          "name": "bool",
+          "type": "BOOLEAN",
+          "links": [],
+          "slot_index": 3
+        },
+        {
+          "name": "list",
+          "type": "LIST",
+          "links": [],
+          "slot_index": 4
+        },
+        {
+          "name": "dict",
+          "type": "DICT",
+          "links": [],
+          "slot_index": 5
+        },
+        {
+          "name": "any",
+          "type": "*",
+          "links": [],
+          "slot_index": 6
+        }
+      ],
+      "properties": {
+        "recipe_id": "regex",
+        "Node name for S&R": "UtilMegaPack_Programming"
+      },
+      "widgets_values": [
+        "regex_extract",
+        "(use pack default)",
+        80,
+        false,
+        false,
+        0,
+        0.0,
+        0.0,
+        1.0,
+        0.5,
+        -1,
+        "\"title\":\\s*\"([^\"]+)\"",
+        1,
+        "",
+        0,
+        "",
+        "{}",
+        "",
+        "{}",
+        "",
+        "",
+        0,
+        0,
+        0,
+        false,
+        "",
+        "",
+        10,
+        1,
+        "i<10",
+        1000,
+        false,
+        "",
+        "",
+        "<",
+        "",
+        "{\"_\": \"\"}",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 3,
+      "type": "UtilMegaPack_Prompt",
+      "pos": [
+        810,
+        50
+      ],
+      "size": [
+        320,
+        596
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "template",
+          "type": "STRING",
+          "link": 2,
+          "widget": {
+            "name": "template"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "all_prompts",
+          "type": "LIST",
+          "links": [],
+          "slot_index": 2
+        },
+        {
+          "name": "token_count",
+          "type": "INT",
+          "links": [],
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "recipe_id": "tmpl",
+        "Node name for S&R": "UtilMegaPack_Prompt"
+      },
+      "widgets_values": [
+        "template_render",
+        "(use pack default)",
+        "",
+        0,
+        "",
+        -1,
+        "",
+        "{}",
+        "",
+        1.0,
+        "",
+        1.0,
+        "{}",
+        true,
+        "",
+        "realistic",
+        ", ",
+        "",
+        "llama3.2",
+        "http://127.0.0.1:11434",
+        "detailed",
+        60,
+        ""
+      ]
+    },
+    {
+      "id": 4,
+      "type": "ShowText",
+      "pos": [
+        1190,
+        50
+      ],
+      "size": [
+        320,
+        94
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 3,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "recipe_id": "out",
+        "Node name for S&R": "ShowText"
+      },
+      "widgets_values": []
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      3,
+      0,
+      4,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "Fetch",
+      "bounding": [
+        30,
+        0,
+        360,
+        946
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Extract",
+      "bounding": [
+        410,
+        0,
+        360,
+        1048
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Template",
+      "bounding": [
+        790,
+        0,
+        360,
+        666
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Output",
+      "bounding": [
+        1170,
+        0,
+        360,
+        164
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "description": "Fetch JSON from an HTTP endpoint, extract a field with regex, render it into a prompt template, then save the resulting text as a manifest for downstream use.",
+    "title": "MegaPack \u2014 HTTP to Image Pipeline",
+    "tier": 2,
+    "pack": "ComfyUI-Utility-MegaPack"
+  },
+  "version": 0.4
+}
