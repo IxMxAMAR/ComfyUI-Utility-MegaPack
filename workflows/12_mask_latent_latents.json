@@ -1,0 +1,181 @@
+{
+  "last_node_id": 2,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UtilMegaPack_MaskLatent",
+      "pos": [
+        50,
+        50
+      ],
+      "size": [
+        320,
+        536
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "name": "a",
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 0
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "info",
+          "type": "DICT",
+          "links": [
+            1
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "recipe_id": "ml",
+        "Node name for S&R": "UtilMegaPack_MaskLatent"
+      },
+      "widgets_values": [
+        "latent_inspect",
+        "(use pack default)",
+        1.0,
+        0.0,
+        0.0,
+        0.05,
+        3,
+        4.0,
+        "union",
+        0.0,
+        0.5,
+        false,
+        "add",
+        0.5,
+        0.1,
+        -1,
+        1.5,
+        "raise",
+        64,
+        64,
+        0.0
+      ]
+    },
+    {
+      "id": 2,
+      "type": "ShowText",
+      "pos": [
+        430,
+        50
+      ],
+      "size": [
+        320,
+        94
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 1,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "recipe_id": "out",
+        "Node name for S&R": "ShowText"
+      },
+      "widgets_values": []
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      2,
+      2,
+      0,
+      "DICT"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "Action",
+      "bounding": [
+        30,
+        0,
+        360,
+        606
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Output",
+      "bounding": [
+        410,
+        0,
+        360,
+        164
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "description": "Inspect latent tensor dimensions and statistics using MaskLatent's latent_inspect mode.",
+    "title": "MegaPack \u2014 MaskLatent: Latent Inspect",
+    "tier": 1,
+    "pack": "ComfyUI-Utility-MegaPack"
+  },
+  "version": 0.4
+}

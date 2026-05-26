@@ -1,0 +1,194 @@
+{
+  "last_node_id": 2,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UtilMegaPack_IOWorkflow",
+      "pos": [
+        50,
+        50
+      ],
+      "size": [
+        320,
+        876
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "parsed",
+          "type": "DICT",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [],
+          "slot_index": 2
+        },
+        {
+          "name": "status_code",
+          "type": "INT",
+          "links": [],
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "recipe_id": "op",
+        "Node name for S&R": "UtilMegaPack_IOWorkflow"
+      },
+      "widgets_values": [
+        "fs_glob",
+        "(use pack default)",
+        "C:/ComfyUI/input",
+        true,
+        "*.png",
+        false,
+        "",
+        "",
+        false,
+        false,
+        "",
+        "",
+        "",
+        "",
+        "_",
+        "",
+        30,
+        "{}",
+        "{}",
+        "{date}_{seed}_{prompt_slug}.png",
+        0,
+        "",
+        "png",
+        "",
+        "{}",
+        "",
+        "MegaPack",
+        false,
+        0.0,
+        1.0,
+        0.1,
+        "",
+        0.0,
+        ".png,.jpg,.jpeg,.webp",
+        "batch.zip",
+        "img",
+        "png",
+        "."
+      ]
+    },
+    {
+      "id": 2,
+      "type": "ShowText",
+      "pos": [
+        430,
+        50
+      ],
+      "size": [
+        320,
+        94
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 1,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "recipe_id": "out",
+        "Node name for S&R": "ShowText"
+      },
+      "widgets_values": []
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "Action",
+      "bounding": [
+        30,
+        0,
+        360,
+        946
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    },
+    {
+      "title": "Output",
+      "bounding": [
+        410,
+        0,
+        360,
+        164
+      ],
+      "color": "#3F789E",
+      "font_size": 24,
+      "locked": false
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "description": "List files matching a glob pattern using IOWorkflow's fs_glob mode.",
+    "title": "MegaPack \u2014 IOWorkflow: Filesystem Glob",
+    "tier": 1,
+    "pack": "ComfyUI-Utility-MegaPack"
+  },
+  "version": 0.4
+}
