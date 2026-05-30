@@ -1,6 +1,6 @@
 {
-  "last_node_id": 1,
-  "last_link_id": 0,
+  "last_node_id": 2,
+  "last_link_id": 1,
   "nodes": [
     {
       "id": 1,
@@ -11,7 +11,7 @@
       ],
       "size": [
         320,
-        1244
+        1500
       ],
       "flags": {},
       "order": 1,
@@ -21,7 +21,9 @@
         {
           "name": "prompt",
           "type": "STRING",
-          "links": [],
+          "links": [
+            1
+          ],
           "slot_index": 0
         },
         {
@@ -74,9 +76,58 @@
         60,
         ""
       ]
+    },
+    {
+      "id": 2,
+      "type": "ShowText|pysssss",
+      "pos": [
+        460,
+        60
+      ],
+      "size": [
+        320,
+        88
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 1,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "recipe_id": "out",
+        "Node name for S&R": "ShowText|pysssss"
+      },
+      "widgets_values": [
+        ""
+      ]
     }
   ],
-  "links": [],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ]
+  ],
   "groups": [
     {
       "title": "Action",
@@ -84,7 +135,7 @@
         35,
         -1,
         370,
-        1330
+        1586
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -96,7 +147,7 @@
         435,
         -1,
         370,
-        190
+        174
       ],
       "color": "#3F789E",
       "font_size": 24,
