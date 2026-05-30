@@ -1,17 +1,17 @@
 {
-  "last_node_id": 3,
-  "last_link_id": 2,
+  "last_node_id": 2,
+  "last_link_id": 1,
   "nodes": [
     {
       "id": 1,
       "type": "UtilMegaPack_SmokeTest",
       "pos": [
-        50,
-        50
+        60,
+        60
       ],
       "size": [
         320,
-        134
+        148
       ],
       "flags": {},
       "order": 1,
@@ -41,12 +41,12 @@
       "id": 2,
       "type": "UtilMegaPack_Convenience",
       "pos": [
-        430,
-        50
+        460,
+        60
       ],
       "size": [
         320,
-        512
+        756
       ],
       "flags": {},
       "order": 2,
@@ -97,9 +97,7 @@
         {
           "name": "out_1",
           "type": "*",
-          "links": [
-            2
-          ],
+          "links": [],
           "slot_index": 0
         },
         {
@@ -150,44 +148,6 @@
         "",
         ""
       ]
-    },
-    {
-      "id": 3,
-      "type": "ShowText",
-      "pos": [
-        810,
-        50
-      ],
-      "size": [
-        320,
-        94
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 2,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "links": [],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "recipe_id": "out",
-        "Node name for S&R": "ShowText"
-      },
-      "widgets_values": []
     }
   ],
   "links": [
@@ -198,24 +158,16 @@
       2,
       0,
       "STRING"
-    ],
-    [
-      2,
-      2,
-      0,
-      3,
-      0,
-      "*"
     ]
   ],
   "groups": [
     {
       "title": "Source",
       "bounding": [
-        30,
-        0,
-        360,
-        204
+        35,
+        -1,
+        370,
+        234
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -224,10 +176,10 @@
     {
       "title": "Reroute",
       "bounding": [
-        410,
-        0,
-        360,
-        582
+        435,
+        -1,
+        370,
+        842
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -236,10 +188,10 @@
     {
       "title": "Output",
       "bounding": [
-        790,
-        0,
-        360,
-        164
+        835,
+        -1,
+        370,
+        190
       ],
       "color": "#3F789E",
       "font_size": 24,

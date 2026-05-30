@@ -1,17 +1,17 @@
 {
-  "last_node_id": 2,
-  "last_link_id": 1,
+  "last_node_id": 1,
+  "last_link_id": 0,
   "nodes": [
     {
       "id": 1,
       "type": "UtilMegaPack_Convenience",
       "pos": [
-        50,
-        50
+        60,
+        60
       ],
       "size": [
         320,
-        512
+        756
       ],
       "flags": {},
       "order": 1,
@@ -62,9 +62,7 @@
         {
           "name": "out_1",
           "type": "*",
-          "links": [
-            1
-          ],
+          "links": [],
           "slot_index": 0
         },
         {
@@ -115,64 +113,17 @@
         "",
         ""
       ]
-    },
-    {
-      "id": 2,
-      "type": "ShowText",
-      "pos": [
-        430,
-        50
-      ],
-      "size": [
-        320,
-        94
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 1,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "links": [],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "recipe_id": "out",
-        "Node name for S&R": "ShowText"
-      },
-      "widgets_values": []
     }
   ],
-  "links": [
-    [
-      1,
-      1,
-      0,
-      2,
-      0,
-      "*"
-    ]
-  ],
+  "links": [],
   "groups": [
     {
       "title": "Action",
       "bounding": [
-        30,
-        0,
-        360,
-        582
+        35,
+        -1,
+        370,
+        842
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -181,10 +132,10 @@
     {
       "title": "Output",
       "bounding": [
-        410,
-        0,
-        360,
-        164
+        435,
+        -1,
+        370,
+        190
       ],
       "color": "#3F789E",
       "font_size": 24,

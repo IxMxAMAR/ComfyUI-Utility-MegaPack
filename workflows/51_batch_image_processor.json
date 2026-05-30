@@ -1,17 +1,17 @@
 {
-  "last_node_id": 4,
-  "last_link_id": 3,
+  "last_node_id": 3,
+  "last_link_id": 2,
   "nodes": [
     {
       "id": 1,
       "type": "UtilMegaPack_ImagePro",
       "pos": [
-        50,
-        50
+        60,
+        60
       ],
       "size": [
         320,
-        884
+        986
       ],
       "flags": {},
       "order": 1,
@@ -93,6 +93,7 @@
         "*.png",
         "",
         0,
+        "randomize",
         0,
         0.0,
         1.0,
@@ -130,12 +131,12 @@
       "id": 2,
       "type": "UtilMegaPack_ImagePro",
       "pos": [
-        430,
-        50
+        460,
+        60
       ],
       "size": [
         320,
-        884
+        986
       ],
       "flags": {},
       "order": 2,
@@ -217,6 +218,7 @@
         "*.png",
         "",
         -1,
+        "randomize",
         0,
         0.0,
         1.0,
@@ -254,12 +256,12 @@
       "id": 3,
       "type": "UtilMegaPack_IOWorkflow",
       "pos": [
-        810,
-        50
+        860,
+        60
       ],
       "size": [
         320,
-        876
+        1204
       ],
       "flags": {},
       "order": 3,
@@ -280,9 +282,7 @@
         {
           "name": "text",
           "type": "STRING",
-          "links": [
-            3
-          ],
+          "links": [],
           "slot_index": 0
         },
         {
@@ -330,6 +330,7 @@
         "{}",
         "{date}_{seed}_{prompt_slug}.png",
         0,
+        "randomize",
         "",
         "png",
         "",
@@ -348,44 +349,6 @@
         "png",
         "."
       ]
-    },
-    {
-      "id": 4,
-      "type": "ShowText",
-      "pos": [
-        1190,
-        50
-      ],
-      "size": [
-        320,
-        94
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 3,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "links": [],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "recipe_id": "path_out",
-        "Node name for S&R": "ShowText"
-      },
-      "widgets_values": []
     }
   ],
   "links": [
@@ -404,24 +367,16 @@
       3,
       1,
       "IMAGE"
-    ],
-    [
-      3,
-      3,
-      0,
-      4,
-      0,
-      "STRING"
     ]
   ],
   "groups": [
     {
       "title": "Load",
       "bounding": [
-        30,
-        0,
-        360,
-        954
+        35,
+        -1,
+        370,
+        1072
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -430,10 +385,10 @@
     {
       "title": "Process",
       "bounding": [
-        410,
-        0,
-        360,
-        954
+        435,
+        -1,
+        370,
+        1072
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -442,10 +397,10 @@
     {
       "title": "Save",
       "bounding": [
-        790,
-        0,
-        740,
-        946
+        835,
+        -1,
+        770,
+        1290
       ],
       "color": "#3F789E",
       "font_size": 24,

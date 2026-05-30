@@ -1,17 +1,17 @@
 {
-  "last_node_id": 3,
-  "last_link_id": 2,
+  "last_node_id": 2,
+  "last_link_id": 1,
   "nodes": [
     {
       "id": 1,
       "type": "LoadImage",
       "pos": [
-        50,
-        50
+        60,
+        60
       ],
       "size": [
         320,
-        108
+        122
       ],
       "flags": {},
       "order": 1,
@@ -45,12 +45,12 @@
       "id": 2,
       "type": "UtilMegaPack_MaskLatent",
       "pos": [
-        430,
-        50
+        460,
+        60
       ],
       "size": [
         320,
-        536
+        598
       ],
       "flags": {},
       "order": 2,
@@ -93,9 +93,7 @@
         {
           "name": "info",
           "type": "DICT",
-          "links": [
-            2
-          ],
+          "links": [],
           "slot_index": 2
         }
       ],
@@ -120,50 +118,13 @@
         0.5,
         0.1,
         -1,
+        "randomize",
         1.5,
         "raise",
         64,
         64,
         0.0
       ]
-    },
-    {
-      "id": 3,
-      "type": "ShowText",
-      "pos": [
-        810,
-        50
-      ],
-      "size": [
-        320,
-        94
-      ],
-      "flags": {},
-      "order": 3,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 2,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "links": [],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "recipe_id": "out",
-        "Node name for S&R": "ShowText"
-      },
-      "widgets_values": []
     }
   ],
   "links": [
@@ -174,24 +135,16 @@
       2,
       0,
       "IMAGE"
-    ],
-    [
-      2,
-      2,
-      2,
-      3,
-      0,
-      "DICT"
     ]
   ],
   "groups": [
     {
       "title": "Input",
       "bounding": [
-        30,
-        0,
-        360,
-        178
+        35,
+        -1,
+        370,
+        208
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -200,10 +153,10 @@
     {
       "title": "Action",
       "bounding": [
-        410,
-        0,
-        360,
-        606
+        435,
+        -1,
+        370,
+        684
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -212,10 +165,10 @@
     {
       "title": "Output",
       "bounding": [
-        790,
-        0,
-        360,
-        164
+        835,
+        -1,
+        370,
+        190
       ],
       "color": "#3F789E",
       "font_size": 24,

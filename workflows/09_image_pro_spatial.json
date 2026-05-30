@@ -6,12 +6,12 @@
       "id": 1,
       "type": "LoadImage",
       "pos": [
-        50,
-        50
+        60,
+        60
       ],
       "size": [
         320,
-        108
+        122
       ],
       "flags": {},
       "order": 1,
@@ -45,12 +45,12 @@
       "id": 2,
       "type": "UtilMegaPack_ImagePro",
       "pos": [
-        430,
-        50
+        460,
+        60
       ],
       "size": [
         320,
-        884
+        986
       ],
       "flags": {},
       "order": 2,
@@ -132,6 +132,7 @@
         "*.png",
         "",
         -1,
+        "randomize",
         0,
         0.0,
         1.0,
@@ -169,12 +170,12 @@
       "id": 3,
       "type": "PreviewImage",
       "pos": [
-        810,
-        50
+        860,
+        60
       ],
       "size": [
         320,
-        74
+        82
       ],
       "flags": {},
       "order": 3,
@@ -216,10 +217,10 @@
     {
       "title": "Input",
       "bounding": [
-        30,
-        0,
-        360,
-        178
+        35,
+        -1,
+        370,
+        208
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -228,10 +229,10 @@
     {
       "title": "Process",
       "bounding": [
-        410,
-        0,
-        360,
-        954
+        435,
+        -1,
+        370,
+        1072
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -240,10 +241,10 @@
     {
       "title": "Preview",
       "bounding": [
-        790,
-        0,
-        360,
-        144
+        835,
+        -1,
+        370,
+        168
       ],
       "color": "#3F789E",
       "font_size": 24,

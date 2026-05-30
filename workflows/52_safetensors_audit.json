@@ -1,17 +1,17 @@
 {
-  "last_node_id": 5,
-  "last_link_id": 4,
+  "last_node_id": 4,
+  "last_link_id": 3,
   "nodes": [
     {
       "id": 1,
       "type": "UtilMegaPack_ModelsSampling",
       "pos": [
-        50,
-        50
+        60,
+        60
       ],
       "size": [
         320,
-        666
+        754
       ],
       "flags": {},
       "order": 1,
@@ -96,6 +96,7 @@
         9,
         8,
         0,
+        "randomize",
         "fixed",
         "",
         0,
@@ -111,12 +112,12 @@
       "id": 2,
       "type": "UtilMegaPack_ModelsSampling",
       "pos": [
-        430,
-        50
+        460,
+        60
       ],
       "size": [
         320,
-        666
+        754
       ],
       "flags": {},
       "order": 2,
@@ -207,6 +208,7 @@
         9,
         8,
         0,
+        "randomize",
         "fixed",
         0,
         4,
@@ -221,12 +223,12 @@
       "id": 3,
       "type": "UtilMegaPack_ModelsSampling",
       "pos": [
-        810,
-        50
+        860,
+        60
       ],
       "size": [
         320,
-        666
+        754
       ],
       "flags": {},
       "order": 3,
@@ -319,6 +321,7 @@
         9,
         8,
         0,
+        "randomize",
         "fixed",
         0,
         4,
@@ -333,12 +336,12 @@
       "id": 4,
       "type": "UtilMegaPack_IOWorkflow",
       "pos": [
-        1190,
-        50
+        1260,
+        60
       ],
       "size": [
         320,
-        876
+        1204
       ],
       "flags": {},
       "order": 4,
@@ -367,9 +370,7 @@
         {
           "name": "text",
           "type": "STRING",
-          "links": [
-            4
-          ],
+          "links": [],
           "slot_index": 0
         },
         {
@@ -417,6 +418,7 @@
         "{}",
         "{date}_{seed}_{prompt_slug}.png",
         0,
+        "randomize",
         "",
         "png",
         "",
@@ -434,44 +436,6 @@
         "png",
         "."
       ]
-    },
-    {
-      "id": 5,
-      "type": "ShowText",
-      "pos": [
-        1570,
-        50
-      ],
-      "size": [
-        320,
-        94
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "link": 4,
-          "widget": {
-            "name": "text"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "links": [],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "recipe_id": "out",
-        "Node name for S&R": "ShowText"
-      },
-      "widgets_values": []
     }
   ],
   "links": [
@@ -498,24 +462,16 @@
       4,
       1,
       "STRING"
-    ],
-    [
-      4,
-      4,
-      0,
-      5,
-      0,
-      "STRING"
     ]
   ],
   "groups": [
     {
       "title": "Discover",
       "bounding": [
-        30,
-        0,
-        360,
-        736
+        35,
+        -1,
+        370,
+        840
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -524,10 +480,10 @@
     {
       "title": "Fingerprint",
       "bounding": [
-        410,
-        0,
-        360,
-        736
+        435,
+        -1,
+        370,
+        840
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -536,10 +492,10 @@
     {
       "title": "Metadata",
       "bounding": [
-        790,
-        0,
-        360,
-        736
+        835,
+        -1,
+        370,
+        840
       ],
       "color": "#3F789E",
       "font_size": 24,
@@ -548,10 +504,10 @@
     {
       "title": "Report",
       "bounding": [
-        1170,
-        0,
-        740,
-        946
+        1235,
+        -1,
+        770,
+        1290
       ],
       "color": "#3F789E",
       "font_size": 24,
