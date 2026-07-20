@@ -28,8 +28,8 @@ Two user-reported bugs from v0.3.0:
 
 ## [0.3.0] — 2026-05-17
 
-Big audit + fix release driven by two full-codebase Gemini Pro reviews
-(Python backend + JS frontend) plus first-party verification of every
+Big audit + fix release driven by two full-codebase reviews
+(Python backend + JS frontend) with first-party verification of every
 critical finding. Four security bugs, three memory leaks, eight correctness
 bugs, ten new utility ops, and two new theme UX features.
 
@@ -160,7 +160,7 @@ bugs, ten new utility ops, and two new theme UX features.
 
 ## [0.2.0] — 2026-05-06
 
-Major feature release: wire/connection theming, 4 new themes, per-node-category accent stripes, offscreen-canvas pattern caching, and group/grid color sync. Scope informed by a second Gemini Pro code review.
+Major feature release: wire/connection theming, 4 new themes, per-node-category accent stripes, offscreen-canvas pattern caching, and group/grid color sync. Scope informed by a second full code review.
 
 ### Added — Wires (connections / "spaghetti noodles")
 - **Per-theme wire color palette.** Themes declare `wirePalette: { default, IMAGE, LATENT, MASK, ... }`. On apply, ComfyUI's `app.canvas.default_connection_color_byType` is mutated to match. Originals snapshotted and restored when the theme changes.
